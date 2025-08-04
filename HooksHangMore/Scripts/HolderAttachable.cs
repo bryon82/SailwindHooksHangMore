@@ -10,6 +10,9 @@ namespace HooksHangMore
         private bool _disallowHangingOnTrigger;
         private float _framesAfterAwake;
 
+        public Vector3 PositionOffset { get; set; }
+        public Vector3 RotationOffset { get; set; }
+
         private void Awake()
         {
             _shipItem = GetComponent<ShipItem>();

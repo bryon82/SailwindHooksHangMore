@@ -6,6 +6,18 @@ namespace HooksHangMore
 {
     internal class ItemHolderPatches
     {
+        private static readonly Vector3 ROD_POSITION_OFFSET = new Vector3(0.309f, 1.1f, -0.38f);
+        private static readonly Vector3 ROD_ROTATION_OFFSET = new Vector3(-40f, 180f, 0f);
+
+        private static readonly Vector3 BROOM_POSITION_OFFSET = new Vector3(0f, -0.25f, -0.11f);
+        private static readonly Vector3 CHIP_LOG_POSITION_OFFSET = new Vector3(0.002f, 0.25f, -0.12f);
+
+        private static readonly Vector3 QUADRANT_POSITION_OFFSET = new Vector3(-0.0155f, 0.164f, -0.115f);
+        private static readonly Vector3 QUADRANT_ROTATION_OFFSET = new Vector3(90f, -90f, 0f);
+
+        private static readonly Vector3 KNIFE_POSITION_OFFSET = new Vector3(0.05f, -0.115f, -0.182f);
+        private static readonly Vector3 KNIFE_ROTATION_OFFSET = new Vector3(270f, 270f, 0f);        
+
         [HarmonyPatch(typeof(ShipItem))]
         private class ShipItemPatches
         {
@@ -17,7 +29,10 @@ namespace HooksHangMore
                     __instance.gameObject.AddComponent<ShipItemHolder>();
 
                 if (__instance is ShipItemBroom broom)
-                    broom.gameObject.AddComponent<HolderAttachable>();
+                {
+                    var attachable = broom.gameObject.AddComponent<HolderAttachable>();
+                    attachable.PositionOffset = BROOM_POSITION_OFFSET;
+                }
             }
 
             [HarmonyPrefix]
@@ -53,7 +68,9 @@ namespace HooksHangMore
         {
             public static void Postfix(ShipItemFishingRod __instance)
             {
-                __instance.gameObject.AddComponent<HolderAttachable>();
+                var attachable = __instance.gameObject.AddComponent<HolderAttachable>();
+                attachable.PositionOffset = ROD_POSITION_OFFSET;
+                attachable.RotationOffset = ROD_ROTATION_OFFSET;
             }
         }
 
@@ -62,7 +79,8 @@ namespace HooksHangMore
         {
             public static void Postfix(ShipItemChipLog __instance)
             {
-                __instance.gameObject.AddComponent<HolderAttachable>();
+                var attachable = __instance.gameObject.AddComponent<HolderAttachable>();
+                attachable.PositionOffset = CHIP_LOG_POSITION_OFFSET;                
             }
         }
 
@@ -71,7 +89,9 @@ namespace HooksHangMore
         {
             public static void Postfix(ShipItemQuadrant __instance)
             {
-                __instance.gameObject.AddComponent<HolderAttachable>();
+                var attachable = __instance.gameObject.AddComponent<HolderAttachable>();
+                attachable.PositionOffset = QUADRANT_POSITION_OFFSET;
+                attachable.RotationOffset = QUADRANT_ROTATION_OFFSET;
             }
         }
 
@@ -82,7 +102,9 @@ namespace HooksHangMore
             [HarmonyPatch("OnLoad")]
             public static void AddComponent(ShipItemKnife __instance)
             {
-                __instance.gameObject.AddComponent<HolderAttachable>();
+                var attachable = __instance.gameObject.AddComponent<HolderAttachable>();
+                attachable.PositionOffset = KNIFE_POSITION_OFFSET;
+                attachable.RotationOffset = KNIFE_ROTATION_OFFSET;
             }
 
             [HarmonyPrefix]
