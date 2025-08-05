@@ -15,18 +15,21 @@ namespace HooksHangMore
 
         internal void AttachItem(ShipItem item)
         {
-            var localAttachOffset = Vector3.zero;
-            var rotationOffset = Quaternion.identity;
+            if (item == null)
+            {
+                LogError("ShipItem is null, cannot hang item");
+                return;
+            }                
 
             var holderAttachable = item.GetComponent<HolderAttachable>();
-
-            if (holderAttachable != null) 
+            if (holderAttachable == null)
             {
-                if (holderAttachable.PositionOffset != null)
-                    localAttachOffset = holderAttachable.PositionOffset;
-                if (holderAttachable.RotationOffset != null)
-                    rotationOffset = Quaternion.Euler(holderAttachable.RotationOffset);
+                LogError("HolderAttachable is null, cannot hang item");
+                return;
             }
+
+            var localAttachOffset = holderAttachable.PositionOffset;
+            var rotationOffset = Quaternion.Euler(holderAttachable.RotationOffset);
 
             AttachedItems.Add(item, this);
             _attachedItem = item;
