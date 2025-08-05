@@ -12,9 +12,9 @@ Allows you to hang more items on lamp hooks.
 
 #### Fishing Rod
 
-If you cast the line first and then attach the rod, fishing will continue. The rate at which you catch fish will be lower than if were holding the fishing rod.  
+If you cast the line first and then attach the rod, fishing will continue. The rate at which you catch fish will be lower than if were holding the fishing rod. The rate while in the fishing rod holder will be higher when you are out to sea.  
 <br>
-The idle fishing mod is not needed, however this mod is compatible with it. The catch rate when in the holder is slightly higher than if the rod is loose on the deck.  
+The idle fishing mod is not needed, however this mod is compatible with it. The catch rate when in the holder is higher than if the rod is loose on the deck.  
 
 #### Chip Log
 
@@ -27,7 +27,7 @@ If you wish to use this to be able to hang a custom item you made:
 2. Add this mod as a BepInEx dependency.
 3. Have your item inherit from ShipItem.
 4. Override OnLoad, in it add the HolderAttachable component and set the offsets so your item hangs properly. PositionOffset and RotationOffset are both of type Vector3. If you do not set them then they default to Vector3.zero.
-5. Override AllowOnItemClick to check if you can click the hook with your item.  
+5. Override AllowOnItemClick to check if you are clicking on a holder and that the holder is not occupied.  
 
 Example:
 ```c#

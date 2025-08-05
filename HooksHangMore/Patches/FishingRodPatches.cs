@@ -10,7 +10,7 @@ namespace HooksHangMore
         [HarmonyPatch(typeof(FishingRodFish))]
         private class FishingRodFishPatches
         {
-            [HarmonyBefore(new string[] { IDLE_FISHING_GUID })]
+            [HarmonyBefore(IDLE_FISHING_GUID)]
             [HarmonyPostfix]
             [HarmonyPatch("Update")]
             public static void Postfix(
@@ -30,14 +30,24 @@ namespace HooksHangMore
                     return;
                 }
 
+                float divisor;
+
+                if (GameState.distanceToLand < 500)
+                {
+                    divisor = IdleFishingFound ? 20f : 6.67f;
+                }
+                else
+                {
+                    divisor = IdleFishingFound ? 10f : 5.13f;
+                }
+
                 ___fishTimer -= Time.deltaTime;
                 float value = Vector3.Distance(__instance.transform.position, ___rod.transform.position);
                 float num = Mathf.InverseLerp(3f, 20f, value) * 2.5f + 0.5f;
                 if (___fishTimer <= 0f)
                 {
-                    ___fishTimer = 1f;
-
-                    num = IdleFishingFound ? num / 20f : num / 6.67f;
+                    ___fishTimer = 1f;                    
+                    num /= divisor;
                     if (Random.Range(0f, 100f) < num)
                     {
                         __instance.CatchFish();
