@@ -36,9 +36,18 @@ namespace HooksHangMore
 
         public void OnTriggerEnter(Collider other)
         {
-            if (!(_framesAfterAwake >= 3f) && !_shipItem.held && _shipItem.GetCurrentInventorySlot() == -1 && !_disallowHangingOnTrigger && other.CompareTag("Hook") && !other.GetComponent<ShipItemHolder>().IsOccupied)
-            {
-                var holder = other.GetComponent<ShipItemHolder>();
+            var holder = other.GetComponent<ShipItemHolder>();
+            var canAttach = _framesAfterAwake < 3f &&
+                _shipItem.sold &&
+                !_shipItem.held &&
+                _shipItem.GetCurrentInventorySlot() == -1
+                && !_disallowHangingOnTrigger &&
+                other.CompareTag("Hook") &&
+                holder != null &&
+                !holder.IsOccupied;
+
+            if (canAttach)
+            {                
                 holder.AttachItem(_shipItem);
                 _shipItemHolder = holder;
             }
