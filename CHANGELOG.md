@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.0.2] - 2025-08-08
+
+### Fixed
+- Quadrant plumb line flailing around when quadrant is attached to hook.
+
 ## [v1.0.1] - 2025-08-07
 
 ### Fixed

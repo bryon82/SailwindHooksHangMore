@@ -80,7 +80,7 @@ namespace HooksHangMore
             public static void Postfix(ShipItemChipLog __instance)
             {
                 var attachable = __instance.gameObject.AddComponent<HolderAttachable>();
-                attachable.PositionOffset = CHIP_LOG_POSITION_OFFSET;                
+                attachable.PositionOffset = CHIP_LOG_POSITION_OFFSET;
             }
         }
 
@@ -95,7 +95,7 @@ namespace HooksHangMore
             }
         }
 
-        [HarmonyPatch(typeof(ShipItemKnife), "OnLoad")]
+        [HarmonyPatch(typeof(ShipItemKnife))]
         private class ShipItemKnifePatches
         {
             [HarmonyPostfix]
@@ -161,6 +161,7 @@ namespace HooksHangMore
                 if (item.GetComponent<HolderAttachable>() != null && item.sold)
                 {
                     holder.AttachItem(item);
+                    item.GetComponent<HolderAttachable>().ShipItemHolder = holder;
                     __result = true;
                     return false;
                 }

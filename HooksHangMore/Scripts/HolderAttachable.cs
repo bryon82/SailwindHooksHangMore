@@ -6,17 +6,18 @@ namespace HooksHangMore
     public class HolderAttachable : MonoBehaviour
     {
         private ShipItem _shipItem;
-        private ShipItemHolder _shipItemHolder;
+        internal ShipItemHolder ShipItemHolder { private get; set; }
         private bool _disallowHangingOnTrigger;
         private float _framesAfterAwake;
 
         public Vector3 PositionOffset { get; set; }
         public Vector3 RotationOffset { get; set; }
+        public bool IsAttached => ShipItemHolder != null;
 
         private void Awake()
         {
             _shipItem = GetComponent<ShipItem>();
-            _shipItemHolder = null;
+            ShipItemHolder = null;
             _disallowHangingOnTrigger = false;
             _framesAfterAwake = 0f;
             PositionOffset = Vector3.zero;
@@ -47,9 +48,9 @@ namespace HooksHangMore
                 !holder.IsOccupied;
 
             if (canAttach)
-            {                
+            {
                 holder.AttachItem(_shipItem);
-                _shipItemHolder = holder;
+                ShipItemHolder = holder;
             }
         }
 
@@ -61,13 +62,13 @@ namespace HooksHangMore
 
         public void DetachHolder()
         {
-            if (_shipItemHolder != null)
-                _shipItemHolder = null;
+            if (ShipItemHolder != null)
+                ShipItemHolder = null;
         }
 
         public void OnDestroy()
         {
-            _shipItemHolder?.DetachItem();
+            ShipItemHolder?.DetachItem();
             _disallowHangingOnTrigger = false;
         }
     }

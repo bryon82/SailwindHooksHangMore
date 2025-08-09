@@ -67,6 +67,7 @@
     <Compile Include="HHM_Plugin.cs" />
     <Compile Include="Patches\FishingRodPatches.cs" />
     <Compile Include="Patches\ItemHolderPatches.cs" />
+    <Compile Include="Patches\QuadrantPatches.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scripts\HolderAttachable.cs" />
     <Compile Include="Scripts\ShipItemHolder.cs" />
