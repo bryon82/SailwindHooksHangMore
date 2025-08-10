@@ -9,8 +9,11 @@ namespace HooksHangMore.Patches
         {
             public static void Postfix(ShipItemQuadrant __instance)
             {
+                if (!GameState.playing)
+                    return;
+
                 var holderAttachable = __instance.GetComponent<HolderAttachable>();
-                if (holderAttachable.IsAttached)
+                if (holderAttachable != null && holderAttachable.IsAttached)
                 {
                     __instance.lockX = false;
                 }

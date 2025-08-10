@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using UnityEngine;
 using static HooksHangMore.HHM_Plugin;
+using static HooksHangMore.Configs;
 
 namespace HooksHangMore
 {
@@ -16,7 +17,7 @@ namespace HooksHangMore
         private static readonly Vector3 QUADRANT_ROTATION_OFFSET = new Vector3(90f, -90f, 0f);
 
         private static readonly Vector3 KNIFE_POSITION_OFFSET = new Vector3(0.05f, -0.115f, -0.182f);
-        private static readonly Vector3 KNIFE_ROTATION_OFFSET = new Vector3(270f, 270f, 0f);        
+        private static readonly Vector3 KNIFE_ROTATION_OFFSET = new Vector3(270f, 270f, 0f);
 
         [HarmonyPatch(typeof(ShipItem))]
         private class ShipItemPatches
@@ -105,6 +106,11 @@ namespace HooksHangMore
                 var attachable = __instance.gameObject.AddComponent<HolderAttachable>();
                 attachable.PositionOffset = KNIFE_POSITION_OFFSET;
                 attachable.RotationOffset = KNIFE_ROTATION_OFFSET;
+                if (flipKnifeRotation.Value)
+                {
+                    attachable.PositionOffset = new Vector3(-attachable.PositionOffset.x, -attachable.PositionOffset.y, attachable.PositionOffset.z);
+                    attachable.RotationOffset = new Vector3(attachable.RotationOffset.x - 180, attachable.RotationOffset.y, attachable.RotationOffset.z);
+                }
             }
 
             [HarmonyPrefix]
@@ -189,7 +195,9 @@ namespace HooksHangMore
                     ___showingIcon = false;
                     ___controlsText.text = "";
                 }
-                else if (lampHook != null && (bool)___pointer.GetHeldItem()?.GetComponent<HolderAttachable>() && !lampHook.GetComponent<ShipItemHolder>().IsOccupied)
+                else if (lampHook != null && (bool)___pointer.GetHeldItem() &&
+                    ___pointer.GetHeldItem().GetComponent<HolderAttachable>() != null &&
+                    !lampHook.GetComponent<ShipItemHolder>().IsOccupied)
                 {
                     ___textLicon.gameObject.SetActive(true);
                     ___showingIcon = true;

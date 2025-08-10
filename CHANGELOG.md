@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.0.3] - 2025-08-09
+
+### Added
+- For those concerned with safety, config entry to flip the knife rotation in the lamp hook.
+
+### Fixed
+- NRE on game startup related to the previous quadrant update.
+- NRE when looking at a lamp hook after eating food.
+
 ## [v1.0.2] - 2025-08-08
 
 ### Fixed

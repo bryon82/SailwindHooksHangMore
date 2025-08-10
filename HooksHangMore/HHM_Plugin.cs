@@ -13,7 +13,7 @@ namespace HooksHangMore
     {
         public const string PLUGIN_GUID = "com.raddude82.hookshangmore";
         public const string PLUGIN_NAME = "HooksHangMore";
-        public const string PLUGIN_VERSION = "1.0.2";
+        public const string PLUGIN_VERSION = "1.0.3";
 
         public const string IDLE_FISHING_GUID = "com.isa_idlefishing.patch";
 
@@ -49,6 +49,8 @@ namespace HooksHangMore
                     IdleFishingFound = true;
                 }
             }
+
+            Configs.InitializeConfigs();
 
             Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly(), PLUGIN_GUID);
         }
