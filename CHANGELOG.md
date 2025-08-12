@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 ## [v1.0.4] - 2025-08-12
 
 ### Fixed
-- Timing conflict with NANDFixes where both mods patch the lamphook.
+- Timing conflict with NANDFixes where both mods patch the lamphook. This made the lamp hook unusable.
 
 ## [v1.0.3] - 2025-08-09
 
