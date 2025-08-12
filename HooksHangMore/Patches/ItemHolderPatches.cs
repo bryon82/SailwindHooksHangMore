@@ -22,9 +22,10 @@ namespace HooksHangMore
         [HarmonyPatch(typeof(ShipItem))]
         private class ShipItemPatches
         {
+            [HarmonyBefore("com.nandbrew.nandfixes")]
             [HarmonyPostfix]
             [HarmonyPatch("OnLoad")]
-            public static void OnLoadAddSavedFishingRodHolder(ShipItem __instance)
+            public static void OnLoadShipItemHolder(ShipItem __instance)
             {
                 if (__instance is ShipItemLampHook)
                     __instance.gameObject.AddComponent<ShipItemHolder>();
@@ -189,7 +190,7 @@ namespace HooksHangMore
                 ref bool ___showingIcon)
             {
                 var lampHook = button.GetComponent<ShipItemLampHook>();
-                if (lampHook != null && (bool)___pointer.GetHeldItem() && lampHook.GetComponent<ShipItemHolder>().IsOccupied)
+                if (lampHook != null && (bool)___pointer.GetHeldItem() && lampHook.GetComponent<ShipItemHolder>() != null && lampHook.GetComponent<ShipItemHolder>().IsOccupied)
                 {
                     ___textLicon.gameObject.SetActive(false);
                     ___showingIcon = false;
