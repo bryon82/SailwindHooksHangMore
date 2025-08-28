@@ -21,9 +21,9 @@ The idle fishing mod is not needed, however this mod is compatible with it. The 
 
 If you throw the log line in the water first and then attach the chip log, speed measurement will continue.  
 
-### Fish
+#### Fish
 
-Fish will dry while hung on a lamp hook. They will not dry out completely if unsalted. You can salt a fish before or after hanging it.  
+Fish will dry while hung on a lamp hook. They will not dry out completely before rotting if unsalted. You can salt a fish before or after hanging it.  
 <br>
 This is compatible with [CookedInfo](https://github.com/alesparise/CookedInfo-Sailwind-Mod). If you have it installed you will see the drying status.  
 
