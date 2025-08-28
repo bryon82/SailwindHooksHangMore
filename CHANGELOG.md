@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.0.5] - 2025-08-28
+
+### Added
+- The ability to hang fish. Fish will dry while hung on a lamp hook. 
+
 ## [v1.0.4] - 2025-08-12
 
 ### Fixed

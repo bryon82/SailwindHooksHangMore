@@ -2,6 +2,7 @@
 using UnityEngine;
 using static HooksHangMore.HHM_Plugin;
 using static HooksHangMore.Configs;
+using System.Collections.Generic;
 
 namespace HooksHangMore
 {
@@ -18,6 +19,24 @@ namespace HooksHangMore
 
         private static readonly Vector3 KNIFE_POSITION_OFFSET = new Vector3(0.05f, -0.115f, -0.182f);
         private static readonly Vector3 KNIFE_ROTATION_OFFSET = new Vector3(270f, 270f, 0f);
+
+        private static readonly Dictionary<string, Vector3> FishPositionOffsets = new Dictionary<string, Vector3>()
+        {
+            { "templefish", new Vector3(-0.035f, -0.14f, -0.13f) },
+            { "sunspot fish", new Vector3(-0.05f, -0.21f, -0.13f) },
+            { "tuna", new Vector3(0f, -0.27f, -0.13f) },
+            { "salmon", new Vector3(-0.035f, -0.3f, -0.13f) },
+            { "eel", new Vector3(-0.006f, -0.65f, -0.12f) },
+            { "blue shimmertail", new Vector3(-0.05f, -0.27f, -0.13f) },
+            { "trout", new Vector3(-0.04f, -0.28f, -0.13f) },
+            { "north fish", new Vector3(-0.03f, -0.2f, -0.13f) },
+            { "blackfin hunter", new Vector3(-0.035f, -0.245f, -0.13f) },
+            { "gold albacore", new Vector3(0f, -0.27f, -0.13f) },
+            { "swamp snapper", new Vector3(-0.035f, -0.265f, -0.13f) },
+            { "blue bubbler", new Vector3(-0.045f, -0.19f, -0.13f) },
+            { "fire fish", new Vector3(-0.065f, -0.2f, -0.13f) },
+        };
+        private static readonly Vector3 FISH_ROTATION_OFFSET = new Vector3(0f, 90f, 270f);
 
         [HarmonyPatch(typeof(ShipItem))]
         private class ShipItemPatches
@@ -94,6 +113,37 @@ namespace HooksHangMore
                 var attachable = __instance.gameObject.AddComponent<HolderAttachable>();
                 attachable.PositionOffset = QUADRANT_POSITION_OFFSET;
                 attachable.RotationOffset = QUADRANT_ROTATION_OFFSET;
+            }
+        }
+
+        [HarmonyPatch(typeof(ShipItemFood))]
+        private class ShipItemFoodPatches
+        {
+            [HarmonyPostfix]
+            [HarmonyPatch("OnLoad")]
+            public static void AddComponent(ShipItemFood __instance)
+            {
+                if (FishPositionOffsets.TryGetValue(__instance.name, out Vector3 positionOffset))
+                {
+                    var attachable = __instance.gameObject.AddComponent<HolderAttachable>();
+                    attachable.PositionOffset = positionOffset;
+                    attachable.RotationOffset = FISH_ROTATION_OFFSET;
+                }
+            }
+
+            [HarmonyPrefix]
+            [HarmonyPatch("AllowOnItemClick")]
+            public static bool AllowOnItemClick(GoPointerButton lookedAtButton, ShipItem __instance, ref bool __result)
+            {
+                if (__instance.GetComponent<HolderAttachable>() != null &&
+                    lookedAtButton.GetComponent<ShipItemHolder>() != null &&
+                    !lookedAtButton.GetComponent<ShipItemHolder>().IsOccupied)
+                {
+                    __result = true;
+                    return false;
+                }
+
+                return true;
             }
         }
 

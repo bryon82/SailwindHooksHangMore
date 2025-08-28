@@ -9,13 +9,15 @@ namespace HooksHangMore
 {
     [BepInPlugin(PLUGIN_GUID, PLUGIN_NAME, PLUGIN_VERSION)]
     [BepInDependency(IDLE_FISHING_GUID, BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency(COOKED_INFO_GUID, BepInDependency.DependencyFlags.SoftDependency)]
     public class HHM_Plugin : BaseUnityPlugin
     {
         public const string PLUGIN_GUID = "com.raddude82.hookshangmore";
         public const string PLUGIN_NAME = "HooksHangMore";
-        public const string PLUGIN_VERSION = "1.0.4";
+        public const string PLUGIN_VERSION = "1.0.5";
 
         public const string IDLE_FISHING_GUID = "com.isa_idlefishing.patch";
+        public const string COOKED_INFO_GUID = "pr0skynesis.cookedinfo";
 
         internal static HHM_Plugin Instance { get; private set; }
         private static ManualLogSource _logger;
@@ -47,6 +49,11 @@ namespace HooksHangMore
                 {
                     LogInfo($"{IDLE_FISHING_GUID} found");
                     IdleFishingFound = true;
+                }
+                if (metadata.GUID.Equals(COOKED_INFO_GUID))
+                {
+                    LogInfo($"{COOKED_INFO_GUID} found");
+                    FishHangDryPatches.GetNonBurnableDescription();
                 }
             }
 

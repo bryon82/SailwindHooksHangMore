@@ -1,6 +1,6 @@
 ﻿using HarmonyLib;
 
-namespace HooksHangMore.Patches
+namespace HooksHangMore
 {
     internal class QuadrantPatches
     {

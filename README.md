@@ -9,6 +9,7 @@ Allows you to hang more items on lamp hooks.
 * Chip Log
 * Quadrant
 * Knives
+* Fish
 
 #### Fishing Rod
 
@@ -19,6 +20,12 @@ The idle fishing mod is not needed, however this mod is compatible with it. The 
 #### Chip Log
 
 If you throw the log line in the water first and then attach the chip log, speed measurement will continue.  
+
+### Fish
+
+Fish will dry while hung on a lamp hook. They will not dry out completely if unsalted. You can salt a fish before or after hanging it.  
+<br>
+This is compatible with [CookedInfo](https://github.com/alesparise/CookedInfo-Sailwind-Mod). If you have it installed you will see the drying status.  
 
 ## For Other Mod Authors
 
