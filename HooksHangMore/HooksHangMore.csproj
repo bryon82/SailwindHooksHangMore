@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HHM_Plugin.cs" />
+    <Compile Include="Patches\BucketPatches.cs" />
     <Compile Include="Patches\FishHangDryPatches.cs" />
     <Compile Include="Patches\FishingRodPatches.cs" />
     <Compile Include="Patches\ItemHolderPatches.cs" />

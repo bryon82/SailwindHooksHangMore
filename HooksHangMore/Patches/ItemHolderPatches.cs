@@ -12,13 +12,22 @@ namespace HooksHangMore
         private static readonly Vector3 ROD_ROTATION_OFFSET = new Vector3(-40f, 180f, 0f);
 
         private static readonly Vector3 BROOM_POSITION_OFFSET = new Vector3(0f, -0.25f, -0.11f);
-        private static readonly Vector3 CHIP_LOG_POSITION_OFFSET = new Vector3(0.002f, 0.25f, -0.12f);
+        private static readonly Vector3 CHIP_LOG_POSITION_OFFSET = new Vector3(0.002f, 0.25f, -0.12f);        
+        private static readonly Vector3 BUCKET_POSITION_OFFSET = new Vector3(0f, -0.23f, -0.125f);
 
         private static readonly Vector3 QUADRANT_POSITION_OFFSET = new Vector3(-0.0155f, 0.164f, -0.115f);
         private static readonly Vector3 QUADRANT_ROTATION_OFFSET = new Vector3(90f, -90f, 0f);
 
         private static readonly Vector3 KNIFE_POSITION_OFFSET = new Vector3(0.05f, -0.115f, -0.182f);
         private static readonly Vector3 KNIFE_ROTATION_OFFSET = new Vector3(270f, 270f, 0f);
+        
+        private static readonly Dictionary<string, Vector3> KettlePositionOffsets = new Dictionary<string, Vector3>()
+        {
+            { "382 kettle A(Clone)", new Vector3(0f, -0.28f, -0.165f) },
+            { "383 kettle E(Clone)", new Vector3(0f, -0.19f, -0.165f) },
+            { "384 kettle M(Clone)", new Vector3(0f, -0.253f, -0.165f) },
+        };
+        private static readonly Vector3 KETTLE_ROTATION_OFFSET = new Vector3(10f, 0f, 0f);
 
         private static readonly Dictionary<string, Vector3> FishPositionOffsets = new Dictionary<string, Vector3>()
         {
@@ -60,6 +69,11 @@ namespace HooksHangMore
             [HarmonyPatch("AllowOnItemClick")]
             public static bool AllowOnItemClick(GoPointerButton lookedAtButton, ShipItem __instance, ref bool __result)
             {
+                if (!__instance.sold)
+                {
+                    return true;
+                }
+
                 if (__instance.GetComponent<HolderAttachable>() != null &&
                     lookedAtButton.GetComponent<ShipItemHolder>() != null &&
                     !lookedAtButton.GetComponent<ShipItemHolder>().IsOccupied)
@@ -133,8 +147,13 @@ namespace HooksHangMore
 
             [HarmonyPrefix]
             [HarmonyPatch("AllowOnItemClick")]
-            public static bool AllowOnItemClick(GoPointerButton lookedAtButton, ShipItem __instance, ref bool __result)
+            public static bool AllowOnItemClick(GoPointerButton lookedAtButton, ShipItemFood __instance, ref bool __result)
             {
+                if (!__instance.sold)
+                {
+                    return true;
+                }
+
                 if (__instance.GetComponent<HolderAttachable>() != null &&
                     lookedAtButton.GetComponent<ShipItemHolder>() != null &&
                     !lookedAtButton.GetComponent<ShipItemHolder>().IsOccupied)
@@ -166,9 +185,88 @@ namespace HooksHangMore
 
             [HarmonyPrefix]
             [HarmonyPatch("AllowOnItemClick")]
-            public static bool AllowOnItemClick(GoPointerButton lookedAtButton, ref bool __result)
+            public static bool AllowOnItemClick(ShipItemKnife __instance, GoPointerButton lookedAtButton, ref bool __result)
             {
-                if ((bool)lookedAtButton.GetComponent<ShipItemHolder>() && !lookedAtButton.GetComponent<ShipItemHolder>().IsOccupied)
+                if (!__instance.sold)
+                {
+                    return true;
+                }
+
+                if (__instance.GetComponent<HolderAttachable>() != null &&
+                    lookedAtButton.GetComponent<ShipItemHolder>() != null &&
+                    !lookedAtButton.GetComponent<ShipItemHolder>().IsOccupied)
+                {
+                    __result = true;
+                    return false;
+                }
+
+                return true;
+            }
+        }
+
+        [HarmonyPatch(typeof(ShipItemKettle))]
+        private class ShipItemKettlePatches
+        {
+            [HarmonyPostfix]
+            [HarmonyPatch("OnLoad")]
+            public static void AddComponent(ShipItemKettle __instance)
+            {
+                if (KettlePositionOffsets.TryGetValue(__instance.transform.name, out Vector3 positionOffset))
+                {
+                    var attachable = __instance.gameObject.AddComponent<HolderAttachable>();
+                    attachable.PositionOffset = positionOffset;
+                    attachable.RotationOffset = KETTLE_ROTATION_OFFSET;
+                }
+            }
+
+            [HarmonyPrefix]
+            [HarmonyPatch("AllowOnItemClick")]
+            public static bool AllowOnItemClick(ShipItemKettle __instance, GoPointerButton lookedAtButton, ref bool __result)
+            {
+                if (!__instance.sold)
+                {
+                    return true;
+                }
+
+                if (__instance.GetComponent<HolderAttachable>() != null &&
+                    lookedAtButton.GetComponent<ShipItemHolder>() != null &&
+                    !lookedAtButton.GetComponent<ShipItemHolder>().IsOccupied)
+                {
+                    __result = true;
+                    return false;
+                }
+
+                return true;
+            }
+        }
+
+        [HarmonyPatch(typeof(ShipItemBottle))]
+        private class ShipItemBottlePatches
+        {
+            [HarmonyPostfix]
+            [HarmonyPatch("OnLoad")]
+            public static void AddComponent(ShipItemBottle __instance)
+            {
+                if (!__instance.name.Contains("bucket"))
+                {                    
+                    return;
+                }
+                var attachable = __instance.gameObject.AddComponent<HolderAttachable>();
+                attachable.PositionOffset = BUCKET_POSITION_OFFSET;
+            }
+
+            [HarmonyPrefix]
+            [HarmonyPatch("AllowOnItemClick")]
+            public static bool AllowOnItemClick(ShipItemBottle __instance, GoPointerButton lookedAtButton, ref bool __result)
+            {
+                if (!__instance.name.Contains("bucket") || !__instance.sold)
+                {
+                    return true;
+                }
+
+                if (__instance.GetComponent<HolderAttachable>() != null &&
+                    lookedAtButton.GetComponent<ShipItemHolder>() != null &&
+                    !lookedAtButton.GetComponent<ShipItemHolder>().IsOccupied)
                 {
                     __result = true;
                     return false;

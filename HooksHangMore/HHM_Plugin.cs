@@ -14,7 +14,7 @@ namespace HooksHangMore
     {
         public const string PLUGIN_GUID = "com.raddude82.hookshangmore";
         public const string PLUGIN_NAME = "HooksHangMore";
-        public const string PLUGIN_VERSION = "1.0.5";
+        public const string PLUGIN_VERSION = "1.0.6";
 
         public const string IDLE_FISHING_GUID = "com.isa_idlefishing.patch";
         public const string COOKED_INFO_GUID = "pr0skynesis.cookedinfo";

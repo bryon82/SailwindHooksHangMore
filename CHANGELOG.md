@@ -2,15 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.0.6] - 2025-09-15
+
+### Added
+- The ability to hang buckets.
+- The ability to hang kettles.
+
 ## [v1.0.5] - 2025-08-28
 
 ### Added
-- The ability to hang fish. Fish will dry while hung on a lamp hook. 
+- The ability to hang fish. Fish will dry while hung on a lamp hook.
 
 ## [v1.0.4] - 2025-08-12
 
 ### Fixed
-- Timing conflict with NANDFixes where both mods patch the lamphook. This made the lamp hook unusable.
+- Timing conflict with NANDFixes where both mods patch the lamp hook. This made the lamp hook unusable.
 
 ## [v1.0.3] - 2025-08-09
 
