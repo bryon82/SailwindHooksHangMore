@@ -10,6 +10,8 @@ Allows you to hang more items on lamp hooks.
 * Quadrant
 * Knives
 * Fish
+* Bucket
+* Kettle
 
 #### Fishing Rod
 
