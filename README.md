@@ -12,6 +12,7 @@ Allows you to hang more items on lamp hooks.
 * Fish
 * Bucket
 * Kettle
+* Hammer
 
 #### Fishing Rod
 

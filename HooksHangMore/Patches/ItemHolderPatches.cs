@@ -1,8 +1,8 @@
 ﻿using HarmonyLib;
-using UnityEngine;
-using static HooksHangMore.HHM_Plugin;
-using static HooksHangMore.Configs;
 using System.Collections.Generic;
+using UnityEngine;
+using static HooksHangMore.Configs;
+using static HooksHangMore.HHM_Plugin;
 
 namespace HooksHangMore
 {
@@ -20,7 +20,10 @@ namespace HooksHangMore
 
         private static readonly Vector3 KNIFE_POSITION_OFFSET = new Vector3(0.05f, -0.115f, -0.182f);
         private static readonly Vector3 KNIFE_ROTATION_OFFSET = new Vector3(270f, 270f, 0f);
-        
+
+        private static readonly Vector3 HAMMER_POSITION_OFFSET = new Vector3(0.0f, -0.3f, -0.22f);
+        private static readonly Vector3 HAMMER_ROTATION_OFFSET = new Vector3(270f, 270f, 0f);
+
         private static readonly Dictionary<string, Vector3> KettlePositionOffsets = new Dictionary<string, Vector3>()
         {
             { "382 kettle A(Clone)", new Vector3(0f, -0.28f, -0.165f) },
@@ -62,6 +65,12 @@ namespace HooksHangMore
                 {
                     var attachable = broom.gameObject.AddComponent<HolderAttachable>();
                     attachable.PositionOffset = BROOM_POSITION_OFFSET;
+                }
+                if (__instance is ShipItemHammer)
+                {
+                    var attachable = __instance.gameObject.AddComponent<HolderAttachable>();
+                    attachable.PositionOffset = HAMMER_POSITION_OFFSET;
+                    attachable.RotationOffset = HAMMER_ROTATION_OFFSET;
                 }
             }
 
@@ -335,14 +344,32 @@ namespace HooksHangMore
                 TextMesh ___controlsText,
                 GoPointer ___pointer,
                 TextMesh ___textLicon,
+                TextMesh ___textRIcon,
                 ref bool ___showingIcon)
             {
                 var lampHook = button.GetComponent<ShipItemLampHook>();
-                if (lampHook != null && (bool)___pointer.GetHeldItem() && lampHook.GetComponent<ShipItemHolder>() != null && lampHook.GetComponent<ShipItemHolder>().IsOccupied)
+                if (lampHook != null && (bool)___pointer.GetHeldItem() &&
+                    lampHook.GetComponent<ShipItemHolder>() != null &&
+                    lampHook.GetComponent<ShipItemHolder>().IsOccupied)
                 {
                     ___textLicon.gameObject.SetActive(false);
                     ___showingIcon = false;
                     ___controlsText.text = "";
+
+                    if ((bool)___pointer.GetHeldItem().GetComponent<ShipItemHammer>() && ShipItemHammer.CanNail(button.GetComponent<ShipItem>()))
+                    {
+                        ___showingIcon = true;
+                        if (button.GetComponent<ShipItem>().nailed)
+                        {
+                            ___textRIcon.gameObject.SetActive(true);
+                            ___controlsText.text = "\nunlock";
+                        }
+                        else
+                        {
+                            ___textRIcon.gameObject.SetActive(true);
+                            ___controlsText.text = "\nlock";
+                        }
+                    }
                 }
                 else if (lampHook != null && (bool)___pointer.GetHeldItem() &&
                     ___pointer.GetHeldItem().GetComponent<HolderAttachable>() != null &&
@@ -351,6 +378,20 @@ namespace HooksHangMore
                     ___textLicon.gameObject.SetActive(true);
                     ___showingIcon = true;
                     ___controlsText.text = $"attach {___pointer.GetHeldItem()?.GetComponent<ShipItem>()?.name}\n";
+
+                    if ((bool)___pointer.GetHeldItem().GetComponent<ShipItemHammer>() && ShipItemHammer.CanNail(button.GetComponent<ShipItem>()))
+                    {
+                        if (button.GetComponent<ShipItem>().nailed)
+                        {
+                            ___textRIcon.gameObject.SetActive(true);
+                            ___controlsText.text = $"attach {___pointer.GetHeldItem()?.GetComponent<ShipItem>()?.name}\nunlock";
+                        }
+                        else
+                        {
+                            ___textRIcon.gameObject.SetActive(true);
+                            ___controlsText.text = $"attach {___pointer.GetHeldItem()?.GetComponent<ShipItem>()?.name}\nlock";
+                        }
+                    }
                 }
             }
         }

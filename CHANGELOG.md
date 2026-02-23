@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.0.7] - 2026-02-23
+
+### Added
+- The ability to hang hammers.
+
 ## [v1.0.6] - 2025-09-15
 
 ### Added
