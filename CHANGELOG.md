@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v1.0.8] - 2026-06-06
+
+### Added
+- The ability to hang oars.
+
 ## [v1.0.7] - 2026-02-23
 
 ### Added

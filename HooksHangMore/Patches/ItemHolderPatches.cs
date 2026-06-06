@@ -15,6 +15,9 @@ namespace HooksHangMore
         private static readonly Vector3 CHIP_LOG_POSITION_OFFSET = new Vector3(0.002f, 0.25f, -0.12f);        
         private static readonly Vector3 BUCKET_POSITION_OFFSET = new Vector3(0f, -0.23f, -0.125f);
 
+        private static readonly Vector3 OAR_POSITION_OFFSET = new Vector3(0f, -0.65f, -0.11f);
+        private static readonly Vector3 OAR_ROTATION_OFFSET = new Vector3(180f, 0f, 0f);
+
         private static readonly Vector3 QUADRANT_POSITION_OFFSET = new Vector3(-0.0155f, 0.164f, -0.115f);
         private static readonly Vector3 QUADRANT_ROTATION_OFFSET = new Vector3(90f, -90f, 0f);
 
@@ -71,6 +74,12 @@ namespace HooksHangMore
                     var attachable = __instance.gameObject.AddComponent<HolderAttachable>();
                     attachable.PositionOffset = HAMMER_POSITION_OFFSET;
                     attachable.RotationOffset = HAMMER_ROTATION_OFFSET;
+                }
+                if (__instance is ShipItemOar oar)
+                {
+                    var attachable = oar.gameObject.AddComponent<HolderAttachable>();
+                    attachable.PositionOffset = OAR_POSITION_OFFSET;
+                    attachable.RotationOffset = OAR_ROTATION_OFFSET;
                 }
             }
 
@@ -348,9 +357,10 @@ namespace HooksHangMore
                 ref bool ___showingIcon)
             {
                 var lampHook = button.GetComponent<ShipItemLampHook>();
+                var holder = lampHook != null ? lampHook.GetComponent<ShipItemHolder>() : null;
                 if (lampHook != null && (bool)___pointer.GetHeldItem() &&
-                    lampHook.GetComponent<ShipItemHolder>() != null &&
-                    lampHook.GetComponent<ShipItemHolder>().IsOccupied)
+                    holder != null &&
+                    holder.IsOccupied)
                 {
                     ___textLicon.gameObject.SetActive(false);
                     ___showingIcon = false;
@@ -373,7 +383,7 @@ namespace HooksHangMore
                 }
                 else if (lampHook != null && (bool)___pointer.GetHeldItem() &&
                     ___pointer.GetHeldItem().GetComponent<HolderAttachable>() != null &&
-                    !lampHook.GetComponent<ShipItemHolder>().IsOccupied)
+                    !holder.IsOccupied)
                 {
                     ___textLicon.gameObject.SetActive(true);
                     ___showingIcon = true;
