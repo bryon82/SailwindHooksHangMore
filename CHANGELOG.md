@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 ## [v1.0.8] - 2026-06-06
 
+### Updated
+- Changed the release process so hopefully some linux users will no longer have issues when unzipping the release file.
+
 ### Added
 - The ability to hang oars.
 
