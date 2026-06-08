@@ -8,7 +8,7 @@ All notable changes to this project will be documented in this file.
 - The ability to hang pots, big pots, wooden mugs, and metal mugs.
 
 ### Updated
-- Buckets no have to be emptied to hang.
+- Buckets now have to be emptied to hang.
 
 ## [v1.0.8] - 2026-06-06
 
