@@ -8,12 +8,16 @@ Allows you to hang more items on lamp hooks.
 * Broom
 * Chip Log
 * Quadrant
-* Knives
+* Knife
 * Fish
 * Bucket
 * Kettle
 * Hammer
 * Oar
+* Pot
+* Big Pot
+* Metal Mug
+* Wooden Mug
 
 #### Fishing Rod
 
@@ -30,6 +34,10 @@ If you throw the log line in the water first and then attach the chip log, speed
 Fish will dry while hung on a lamp hook. They will not dry out completely before rotting if unsalted. You can salt a fish before or after hanging it.  
 <br>
 This is compatible with [CookedInfo](https://github.com/alesparise/CookedInfo-Sailwind-Mod). If you have it installed you will see the drying status.  
+
+#### Pots, Mugs, and Buckets
+
+These items must be emptied before you hang them.  
 
 ## For Other Mod Authors
 

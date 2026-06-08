@@ -35,6 +35,30 @@ namespace HooksHangMore
         };
         private static readonly Vector3 KETTLE_ROTATION_OFFSET = new Vector3(10f, 0f, 0f);
 
+        private static readonly Dictionary<string, Vector3> PotPositionOffsets = new Dictionary<string, Vector3>()
+        {
+            { "156 pot(Clone)", new Vector3(0f, -0.175f, -0.245f) },
+            { "157 pot big(Clone)", new Vector3(0f, -0.205f, -0.29f) },
+        };
+        private static readonly Vector3 POT_ROTATION_OFFSET = new Vector3(0f, 90f, -36f);
+
+        private static readonly Dictionary<string, Vector3> MugPositionOffsets = new Dictionary<string, Vector3>()
+        {
+            { "102 mug metal(Clone)", new Vector3(0.035f, -0.115f, -0.185f) },
+            { "102 mug metal", new Vector3(0.035f, -0.115f, -0.185f) },
+            { "103 mug metal gold(Clone)", new Vector3(0.035f, -0.115f, -0.185f) },
+            { "100 mug wood(Clone)", new Vector3(-0.07f, -0.075f, -0.155f) },
+            { "100 mug wood", new Vector3(-0.07f, -0.075f, -0.155f) },
+        };
+        private static readonly Dictionary<string, Vector3> MugRotationOffsets = new Dictionary<string, Vector3>()
+        {
+            { "102 mug metal(Clone)", new Vector3(0f, 50f, -16f) },
+            { "102 mug metal", new Vector3(0f, 50f, -16f) },
+            { "103 mug metal gold(Clone)", new Vector3(0f, 50f, -16f) },
+            { "100 mug wood(Clone)", new Vector3(15f, 0f, 270f) },
+            { "100 mug wood", new Vector3(15f, 0f, 270f) },
+        };
+
         private static readonly Dictionary<string, Vector3> FishPositionOffsets = new Dictionary<string, Vector3>()
         {
             { "templefish", new Vector3(-0.035f, -0.14f, -0.13f) },
@@ -265,19 +289,24 @@ namespace HooksHangMore
             [HarmonyPatch("OnLoad")]
             public static void AddComponent(ShipItemBottle __instance)
             {
-                if (!__instance.name.Contains("bucket"))
-                {                    
-                    return;
+                if (__instance.name.Contains("bucket"))
+                {
+                    var attachable = __instance.gameObject.AddComponent<HolderAttachable>();
+                    attachable.PositionOffset = BUCKET_POSITION_OFFSET;
                 }
-                var attachable = __instance.gameObject.AddComponent<HolderAttachable>();
-                attachable.PositionOffset = BUCKET_POSITION_OFFSET;
+                else if (MugPositionOffsets.TryGetValue(__instance.transform.name, out Vector3 positionOffset))
+                {
+                    var attachable = __instance.gameObject.AddComponent<HolderAttachable>();
+                    attachable.PositionOffset = positionOffset;
+                    attachable.RotationOffset = MugRotationOffsets.TryGetValue(__instance.transform.name, out Vector3 rotationOffset) ? rotationOffset : Vector3.zero;
+                }
             }
 
             [HarmonyPrefix]
             [HarmonyPatch("AllowOnItemClick")]
             public static bool AllowOnItemClick(ShipItemBottle __instance, GoPointerButton lookedAtButton, ref bool __result)
             {
-                if (!__instance.name.Contains("bucket") || !__instance.sold)
+                if ((!__instance.name.Contains("bucket") && !__instance.name.Contains("mug")) || !__instance.sold)
                 {
                     return true;
                 }
@@ -290,6 +319,86 @@ namespace HooksHangMore
                     return false;
                 }
 
+                return true;
+            }
+
+            [HarmonyPrefix]
+            [HarmonyPatch("OnItemClick")]
+            public static bool OnItemClick(ShipItemSoup __instance, PickupableItem heldItem, ref bool __result)
+            {
+                if ((!__instance.name.Contains("bucket") && !__instance.name.Contains("mug")) || !__instance.sold)
+                {
+                    return true;
+                }
+
+                var holderAttachable = __instance.GetComponent<HolderAttachable>();
+                if (holderAttachable != null &&
+                    holderAttachable.IsAttached)
+                {
+                    if (heldItem.GetComponent<ShipItemBottle>())
+                    {
+                        NotificationUi.instance.ShowNotification("Cannot fill\nwhile it is hanging");
+                        __result = false;
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
+
+        [HarmonyPatch(typeof(ShipItemSoup))]
+        private class ShipItemSoupPatches
+        {
+            [HarmonyPostfix]
+            [HarmonyPatch("OnLoad")]
+            public static void AddComponent(ShipItemSoup __instance)
+            {
+                if (PotPositionOffsets.TryGetValue(__instance.transform.name, out Vector3 positionOffset))
+                {
+                    var attachable = __instance.gameObject.AddComponent<HolderAttachable>();
+                    attachable.PositionOffset = positionOffset;
+                    attachable.RotationOffset = POT_ROTATION_OFFSET;
+                }
+            }
+
+            [HarmonyPrefix]
+            [HarmonyPatch("AllowOnItemClick")]
+            public static bool AllowOnItemClick(ShipItemSoup __instance, GoPointerButton lookedAtButton, ref bool __result)
+            {
+                if (!__instance.sold)
+                {
+                    return true;
+                }
+
+                if (__instance.GetComponent<HolderAttachable>() != null &&
+                    lookedAtButton.GetComponent<ShipItemHolder>() != null &&
+                    !lookedAtButton.GetComponent<ShipItemHolder>().IsOccupied)
+                {
+                    __result = true;
+                    return false;
+                }
+                return true;
+            }
+
+            [HarmonyPrefix]
+            [HarmonyPatch("OnItemClick")]
+            public static bool OnItemClick(ShipItemSoup __instance, PickupableItem heldItem, ref bool __result)
+            {
+                if (!__instance.sold)
+                {
+                    return true;
+                }
+                var holderAttachable = __instance.GetComponent<HolderAttachable>();
+                if (holderAttachable != null &&
+                    holderAttachable.IsAttached)
+                {
+                    if (heldItem.GetComponent<ShipItemBottle>())
+                    {
+                        NotificationUi.instance.ShowNotification("Cannot fill\nwhile it is hanging");
+                        __result = false;
+                        return false;
+                    }
+                }
                 return true;
             }
         }
@@ -331,6 +440,13 @@ namespace HooksHangMore
                 }
 
                 var item = heldItem.GetComponent<ShipItem>();
+                if ((item is ShipItemSoup soup && soup.currentWater > 0) || (item is ShipItemBottle bottle && bottle.health > 0))
+                {
+                    NotificationUi.instance.ShowNotification("Cannot hang\nit is not empty");
+                    __result = false;
+                    return false;
+                }
+
                 if (item.GetComponent<HolderAttachable>() != null && item.sold)
                 {
                     holder.AttachItem(item);
