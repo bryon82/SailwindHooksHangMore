@@ -13,8 +13,8 @@ namespace HooksHangMore
                 if (!GameState.playing || !__instance.name.Contains("bucket"))
                     return;
 
-                var holderAttachable = __instance.GetComponent<HolderAttachable>();
-                if (holderAttachable != null && holderAttachable.IsAttached)
+                var hangable = __instance.GetComponent<HangableItem>();
+                if (hangable != null && hangable.IsHanging())
                 {
                     __instance.bucketHandle.localRotation = Quaternion.Euler(Vector3.zero);
                 }

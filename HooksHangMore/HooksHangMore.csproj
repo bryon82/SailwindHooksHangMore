@@ -65,9 +65,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HHM_Plugin.cs" />
+    <Compile Include="Utilities\Offsets.cs" />
     <Compile Include="Patches\BucketPatches.cs" />
     <Compile Include="Patches\FishHangDryPatches.cs" />
     <Compile Include="Patches\FishingRodPatches.cs" />
+    <Compile Include="Patches\HangeablePatches.cs" />
     <Compile Include="Patches\ItemHolderPatches.cs" />
     <Compile Include="Patches\QuadrantPatches.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v2.0.0] - 2026-06-21
+
+### Changed
+- Some items now hang dynamically instead of being statically attached. Items that hang dynamically: kettles, buckets, fish, mugs, and pots. Items that are still statically attached: fishing poles, knives, oars, chip logs, quadrants, brooms, and hammers.
+
+### Updated
+- Guid, removed the 82.
+
 ## [v1.0.9] - 2026-06-08
 
 ### Added
