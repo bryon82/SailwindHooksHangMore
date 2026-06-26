@@ -42,7 +42,7 @@ These items must be emptied before you hang them.
 
 #### Anchor
 
-You can adjust the length of the rope up to a certain point. You cannot move the vessel by tightening the rope while the anchor is attached to a hook that is not on the ship.  
+While the anchor is attached, you can adjust the length of the rope up to a certain point. You cannot move the vessel by tightening the rope while the anchor is attached to a hook that is not on the ship.  
 
 ## For Other Mod Authors
 
