@@ -61,14 +61,14 @@ namespace HooksHangMore
 
                 if (!Offsets.HangingItems.TryGetOffset(__instance.name, out Offsets offset))
                     return true;
-                
+
                 Vector3 eulerAngles = __instance.transform.eulerAngles;
-                if (offset.LockX)                
+                if (offset.LockX)
                     eulerAngles.x = offset.RotX;
 
-                if (offset.LockZ)                
+                if (offset.LockZ)
                     eulerAngles.z = offset.RotZ;
-                
+
                 __instance.transform.eulerAngles = eulerAngles;
                 __instance.transform.position = ___currentHook.transform.position +
                     ___currentHook.transform.forward * (-0.128f + offset.Position.z) + 

@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v2.1.0] - 2026-06-26
+
+### Added
+- The ability to attach Anchors.
+
 ## [v2.0.0] - 2026-06-21
 
 ### Changed

@@ -31,7 +31,7 @@ namespace HooksHangMore
             {
                 if (!__instance.sold)
                     return true;
-                
+
                 if (__instance.GetComponent<AttachableItem>() != null &&
                     lookedAtButton.GetComponent<AttachableItemHolder>() != null &&
                     !lookedAtButton.GetComponent<AttachableItemHolder>().IsOccupied)

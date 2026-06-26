@@ -26,7 +26,7 @@ namespace HooksHangMore
             RotationOffset = Vector3.zero;
         }
 
-        private void Update()
+        private void LateUpdate()
         {
             if (_pickupable != null && _pickupable is Anchor anchor && IsAttached)
             {

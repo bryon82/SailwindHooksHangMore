@@ -18,6 +18,7 @@ Allows you to hang more items on lamp hooks.
 * Big Pot
 * Metal Mug
 * Wooden Mug
+* Anchor
 
 #### Fishing Rod
 
@@ -35,9 +36,13 @@ Fish will dry while hung on a lamp hook. They will not dry out completely before
 <br>
 This is compatible with [CookedInfo](https://github.com/alesparise/CookedInfo-Sailwind-Mod). If you have it installed you will see the drying status.  
 
-#### Pots, Mugs, and Buckets
+#### Pots, Mugs, and Bucket
 
 These items must be emptied before you hang them.  
+
+#### Anchor
+
+You can adjust the length of the rope up to a certain point. You cannot move the vessel by tightening the rope while the anchor is attached to a hook that is not on the ship.  
 
 ## For Other Mod Authors
 
