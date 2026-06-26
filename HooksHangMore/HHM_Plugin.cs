@@ -18,6 +18,7 @@ namespace HooksHangMore
 
         public const string IDLE_FISHING_GUID = "com.isa_idlefishing.patch";
         public const string COOKED_INFO_GUID = "pr0skynesis.cookedinfo";
+        public const string NAND_FIXES_GUID = "com.nandbrew.nandfixes";
 
         internal static HHM_Plugin Instance { get; private set; }
         private static ManualLogSource _logger;
@@ -28,7 +29,7 @@ namespace HooksHangMore
         internal static void LogError(string message) => _logger.LogError(message);
 
         internal static bool IdleFishingFound { get; private set; } = false;
-        internal static Dictionary<ShipItem, ShipItemHolder> AttachedItems { get; set; }
+        internal static Dictionary<PickupableItem, AttachableItemHolder> AttachedItems { get; set; }
 
         private void Awake()
         {
@@ -40,7 +41,7 @@ namespace HooksHangMore
             Instance = this;
             _logger = Logger;
 
-            AttachedItems = new Dictionary<ShipItem, ShipItemHolder>();
+            AttachedItems = new Dictionary<PickupableItem, AttachableItemHolder>();
 
             var cookedInfoFound = false;
             foreach (var plugin in Chainloader.PluginInfos)
@@ -54,7 +55,7 @@ namespace HooksHangMore
                 if (metadata.GUID.Equals(COOKED_INFO_GUID))
                 {
                     LogInfo($"{COOKED_INFO_GUID} found");
-                    FishHangDryPatches.GetNonBurnableDescription();
+                    HangableFoodPatches.GetNonBurnableDescription();
                     cookedInfoFound = true;
                 }
 

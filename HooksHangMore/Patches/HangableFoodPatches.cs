@@ -5,7 +5,7 @@ using static HooksHangMore.HHM_Plugin;
 
 namespace HooksHangMore
 {
-    internal class FishHangDryPatches
+    internal class HangableFoodPatches
     {
         private delegate void NonBurnableDescDelegate(ref string description, float amount);
         private static NonBurnableDescDelegate _nonBurnableDescription;
@@ -80,6 +80,36 @@ namespace HooksHangMore
 
             _nonBurnableDescription = (NonBurnableDescDelegate)Delegate.CreateDelegate(
                 typeof(NonBurnableDescDelegate), method);
+        }
+
+        [HarmonyPatch(typeof(ShipItemFood))]
+        private class ShipItemFoodPatches
+        {
+            [HarmonyPostfix]
+            [HarmonyPatch("OnLoad")]
+            public static void AddComponent(ShipItemFood __instance)
+            {
+                if (Offsets.HangingItems.IsHangable(__instance.transform.name))
+                    __instance.gameObject.AddComponent<HangableItem>();
+            }
+
+            [HarmonyPrefix]
+            [HarmonyPatch("AllowOnItemClick")]
+            public static bool AllowOnItemClick(GoPointerButton lookedAtButton, ShipItemFood __instance, ref bool __result)
+            {
+                if (!__instance.sold)
+                    return true;
+
+                if (__instance.GetComponent<HangableItem>() != null &&
+                    lookedAtButton.GetComponent<AttachableItemHolder>() != null &&
+                    !lookedAtButton.GetComponent<AttachableItemHolder>().IsOccupied)
+                {
+                    __result = true;
+                    return false;
+                }
+
+                return true;
+            }
         }
     }
 }

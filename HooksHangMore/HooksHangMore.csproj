@@ -65,16 +65,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HHM_Plugin.cs" />
+    <Compile Include="Patches\AttachableAnchorPatches.cs" />
+    <Compile Include="Patches\AttachableChipLogPatches.cs" />
+    <Compile Include="Patches\AttachableKnifePatches.cs" />
+    <Compile Include="Patches\HangableBottlePatches.cs" />
+    <Compile Include="Patches\HangableKettlePatches.cs" />
+    <Compile Include="Patches\HangablePotPatches.cs" />
     <Compile Include="Utilities\Offsets.cs" />
-    <Compile Include="Patches\BucketPatches.cs" />
-    <Compile Include="Patches\FishHangDryPatches.cs" />
-    <Compile Include="Patches\FishingRodPatches.cs" />
+    <Compile Include="Patches\HangableBucketPatches.cs" />
+    <Compile Include="Patches\HangableFoodPatches.cs" />
+    <Compile Include="Patches\AttachableFishingRodPatches.cs" />
     <Compile Include="Patches\HangablePatches.cs" />
-    <Compile Include="Patches\ItemHolderPatches.cs" />
-    <Compile Include="Patches\QuadrantPatches.cs" />
+    <Compile Include="Patches\AttachablePatches.cs" />
+    <Compile Include="Patches\AttachableQuadrantPatches.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Scripts\HolderAttachable.cs" />
-    <Compile Include="Scripts\ShipItemHolder.cs" />
+    <Compile Include="Scripts\AttachableItem.cs" />
+    <Compile Include="Scripts\AttachableItemHolder.cs" />
     <Compile Include="Utilities\Configs.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

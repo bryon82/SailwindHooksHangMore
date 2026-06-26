@@ -5,14 +5,24 @@ using static HooksHangMore.HHM_Plugin;
 
 namespace HooksHangMore
 {
-    internal class FishingRodPatches
+    internal class AttachableFishingRodPatches
     {
-        [HarmonyPatch(typeof(FishingRodFish))]
+        [HarmonyPatch(typeof(ShipItemFishingRod), "OnLoad")]
+        private class ShipItemFishingRodPatches
+        {
+            public static void Postfix(ShipItemFishingRod __instance)
+            {
+                var attachable = __instance.gameObject.AddComponent<AttachableItem>();
+                var offset = Offsets.AttachedItems.GetOffset(__instance.name);
+                attachable.PositionOffset = offset.Position;
+                attachable.RotationOffset = offset.Rotation;
+            }
+        }
+
+        [HarmonyPatch(typeof(FishingRodFish), "Update")]
         private class FishingRodFishPatches
         {
             [HarmonyBefore(IDLE_FISHING_GUID)]
-            [HarmonyPostfix]
-            [HarmonyPatch("Update")]
             public static void Postfix(
                 FishingRodFish __instance,
                 ShipItemFishingRod ___rod,

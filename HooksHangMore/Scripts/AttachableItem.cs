@@ -3,21 +3,23 @@ using static HooksHangMore.HHM_Plugin;
 
 namespace HooksHangMore
 {
-    public class HolderAttachable : MonoBehaviour
+    public class AttachableItem : MonoBehaviour
     {
         private ShipItem _shipItem;
-        internal ShipItemHolder ShipItemHolder { private get; set; }
+        private PickupableItem _pickupable;
+        internal AttachableItemHolder Holder { get; set; }
         private bool _disallowHangingOnTrigger;
         private float _framesAfterAwake;
 
         public Vector3 PositionOffset { get; set; }
         public Vector3 RotationOffset { get; set; }
-        public bool IsAttached => ShipItemHolder != null;
+        public bool IsAttached => Holder != null;        
 
         private void Awake()
         {
+            _pickupable = GetComponent<PickupableItem>();
             _shipItem = GetComponent<ShipItem>();
-            ShipItemHolder = null;
+            Holder = null;
             _disallowHangingOnTrigger = false;
             _framesAfterAwake = 0f;
             PositionOffset = Vector3.zero;
@@ -37,39 +39,43 @@ namespace HooksHangMore
 
         public void OnTriggerEnter(Collider other)
         {
-            var holder = other.GetComponent<ShipItemHolder>();
-            var canAttach = _framesAfterAwake < 3f &&
-                _shipItem.sold &&
-                !_shipItem.held &&
-                _shipItem.GetCurrentInventorySlot() == -1
-                && !_disallowHangingOnTrigger &&
+            var holder = other.GetComponent<AttachableItemHolder>();
+            bool canAttach = (_framesAfterAwake < 3f || GameState.currentlyLoading || GameState.loadingBoatLocalItems) &&
+                !_pickupable.held &&
+                !_disallowHangingOnTrigger &&
                 other.CompareTag("Hook") &&
                 holder != null &&
                 !holder.IsOccupied;
 
+            if (_shipItem != null)
+                canAttach = canAttach &&
+                    _shipItem.sold &&
+                    _shipItem.GetCurrentInventorySlot() == -1;
+
             if (canAttach)
             {
-                holder.AttachItem(_shipItem);
-                ShipItemHolder = holder;
+                holder.AttachItem(_pickupable);
+                Holder = holder;
             }
         }
 
-        //public void OnTriggerExit(Collider other)
-        //{
-        //    if (other.CompareTag("Hook") && _shipItemHolder != null && other.GetComponent<BF_ShipItemHolder>() == _shipItemHolder)
-        //        _shipItemHolder.DetachItem();
-        //}
-
         public void DetachHolder()
         {
-            if (ShipItemHolder != null)
-                ShipItemHolder = null;
+            if (Holder != null)
+                Holder = null;
         }
 
         public void OnDestroy()
         {
-            ShipItemHolder?.DetachItem();
+            Holder?.DetachItem();
             _disallowHangingOnTrigger = false;
         }
     }
 }
+
+
+//public void OnTriggerExit(Collider other)
+//{
+//    if (other.CompareTag("Hook") && _shipItemHolder != null && other.GetComponent<BF_ShipItemHolder>() == _shipItemHolder)
+//        _shipItemHolder.DetachItem();
+//}

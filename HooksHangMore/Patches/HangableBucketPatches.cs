@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace HooksHangMore
 {
-    internal class BucketPatches
+    internal class HangableBucketPatches
     {
         [HarmonyPatch(typeof(Mug), "Update")]
         private class MugPatches

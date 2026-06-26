@@ -73,7 +73,11 @@ namespace HooksHangMore
             { "oar", new Offsets(new Vector3(0f, -0.65f, -0.11f), new Vector3(180f, 0f, 0f)) },
             { "quadrant", new Offsets(new Vector3(-0.0155f, 0.164f, -0.115f), new Vector3(90f, -90f, 0f)) },
             { "knife", new Offsets(new Vector3(0.05f, -0.115f, -0.182f), new Vector3(270f, 270f, 0f)) },
-            { "hammer", new Offsets(new Vector3(0.0f, -0.3f, -0.22f), new Vector3(270f, 270f, 0f)) }
+            { "hammer", new Offsets(new Vector3(0.0f, -0.3f, -0.22f), new Vector3(270f, 270f, 0f)) },
+            { "anchor_E (1)", new Offsets(new Vector3(0f, 0.2f, -0.13f), new Vector3(270f, 0f, 0f)) },
+            { "anchor_E", new Offsets(new Vector3(0f, 0.2f, -0.13f), new Vector3(270f, 0f, 0f)) },
+            { "anchor_M", new Offsets(new Vector3(0f, 0.2f, -0.13f), new Vector3(270f, 0f, 0f)) },
+            { "anchor_A", new Offsets(new Vector3(0f, 0.2f, -0.13f), new Vector3(270f, 0f, 0f)) }
         };
     }
 
