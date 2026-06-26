@@ -34,11 +34,11 @@ namespace HooksHangMore
                 shipItem.itemRigidbodyC.transform.rotation = worldAttachRotation;
 
                 shipItem.itemRigidbodyC.attached = true;
-                LogDebug($"{shipItem.name} Item localpos: {shipItem.itemRigidbodyC.transform.localPosition}, Item parent: {shipItem.itemRigidbodyC.transform.parent}");
+                LogDebug($"{shipItem.name} item localpos: {shipItem.itemRigidbodyC.transform.localPosition}, item parent: {shipItem.itemRigidbodyC.transform.parent}");
             }
             else
             {             
-                LogDebug($"{item.name} Item localpos: {item.transform.localPosition}, Item parent: {item.transform.parent}");
+                LogDebug($"{item.name} item localpos: {item.transform.localPosition}, item parent: {item.transform.parent}");
             }
 
             AttachedItems.Add(item, this);

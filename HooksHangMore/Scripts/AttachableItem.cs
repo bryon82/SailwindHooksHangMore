@@ -26,6 +26,15 @@ namespace HooksHangMore
             RotationOffset = Vector3.zero;
         }
 
+        private void Update()
+        {
+            if (_pickupable != null && _pickupable is Anchor anchor && IsAttached)
+            {
+                anchor.transform.position = Holder.transform.TransformPoint(PositionOffset);
+                anchor.transform.rotation = Holder.transform.rotation * Quaternion.Euler(RotationOffset);
+            }
+        }
+
         private void FixedUpdate()
         {
             if (_framesAfterAwake < 3f)
@@ -54,6 +63,7 @@ namespace HooksHangMore
 
             if (canAttach)
             {
+                LogDebug($"Attaching {_pickupable.name} during load.");
                 holder.AttachItem(_pickupable);
                 Holder = holder;
             }

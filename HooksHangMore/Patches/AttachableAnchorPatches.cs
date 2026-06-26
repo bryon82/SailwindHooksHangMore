@@ -1,6 +1,5 @@
 ﻿using HarmonyLib;
 using System.Collections;
-using System.Threading;
 using UnityEngine;
 using static HooksHangMore.HHM_Plugin;
 
@@ -16,9 +15,17 @@ namespace HooksHangMore
             public static void AwakePatch(Anchor __instance)
             {
                 var attachable = __instance.gameObject.AddComponent<AttachableItem>();
-                var offset = Offsets.AttachedItems.GetOffset(__instance.name);
-                attachable.PositionOffset = offset.Position;
-                attachable.RotationOffset = offset.Rotation;
+                if (Offsets.AttachedItems.TryGetOffset(__instance.name, out var offset))
+                {
+                    attachable.PositionOffset = offset.Position;
+                    attachable.RotationOffset = offset.Rotation;
+                }
+                else
+                {
+                    LogWarning($"Attachable anchor offsets not found for {__instance.name}. Using default offsets.");
+                    attachable.PositionOffset = new Vector3(0f, 0.2f, -0.13f);
+                    attachable.RotationOffset = new Vector3(270f, 0f, 0f);
+                }
             }
 
             [HarmonyPostfix]
@@ -29,15 +36,9 @@ namespace HooksHangMore
                 if (attachable != null && !attachable.IsAttached)
                     return;
 
-                var holder = attachable.Holder;
-                if (holder == null)
-                    return;
-
-                __instance.transform.position = holder.transform.TransformPoint(attachable.PositionOffset);
-                __instance.transform.rotation = holder.transform.rotation * Quaternion.Euler(attachable.RotationOffset);
                 __instance.GetComponent<Rigidbody>().isKinematic = true;
                 __instance.GetComponent<CapsuleCollider>().isTrigger = true;
-            }
+            }           
         }
 
         [HarmonyPatch(typeof(GoPointerButton))]
@@ -50,7 +51,6 @@ namespace HooksHangMore
                 if (!(__instance is Anchor))
                     return;
 
-                LogDebug($"AllowOnItemClick: __instance={__instance.name}, lookedAtButton={lookedAtButton.name}");
                 if (__instance.GetComponent<AttachableItem>() != null &&
                     lookedAtButton.GetComponent<AttachableItemHolder>() != null &&
                     !lookedAtButton.GetComponent<AttachableItemHolder>().IsOccupied)
@@ -96,8 +96,6 @@ namespace HooksHangMore
                     return;
 
                 var holder = ___item.GetComponent<AttachableItemHolder>();
-
-                //if (holder == null || !holder.IsOccupied || !holder.AttachedItem.name.Contains("anchor"))
                 if (holder == null || !holder.IsOccupied || !(holder.AttachedItem is Anchor))
                     return;
                 
@@ -120,7 +118,6 @@ namespace HooksHangMore
 
         internal static IEnumerator AttachAnchor(ShipItemLampHook hook)
         {
-            //yield return new WaitUntil(() => GameState.playing && !GameState.justStarted && !GameState.loadingBoatLocalItems);
             yield return new WaitUntil(() => hook.transform.parent?.gameObject?.GetComponentInChildren<RopeControllerAnchor>()?.joint != null);
 
             var winch = hook.transform.parent.gameObject.GetComponentInChildren<RopeControllerAnchor>();
