@@ -1,4 +1,7 @@
 ﻿using HarmonyLib;
+using System.Collections;
+using UnityEngine;
+using static HooksHangMore.HHM_Plugin;
 
 namespace HooksHangMore
 {
@@ -54,6 +57,66 @@ namespace HooksHangMore
 
                 return true;
             }
+        }
+
+        [HarmonyPatch(typeof(Mug), "Update")]
+        private class MugPatches
+        {
+            public static void Postfix(Mug __instance)
+            {
+                if (!GameState.playing || !__instance.name.Contains("bucket"))
+                    return;
+
+                var hangable = __instance.GetComponent<HangableItem>();
+                if (hangable != null && hangable.IsHanging())
+                {
+                    __instance.bucketHandle.localRotation = Quaternion.Euler(Vector3.zero);
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(SaveablePrefab))]
+        private class SaveablePrefabPatches
+        {
+            [HarmonyPostfix]
+            [HarmonyPatch("PrepareSaveData")]
+            public static void SaveBucketHanging(ShipItem ___item, ref SavePrefabData __result)
+            {
+                if (!(___item is ShipItemBottle) || ___item.name != "bucket")
+                    return;
+
+                var attachable = ___item.GetComponent<HangableItem>();
+                if (attachable == null || !attachable.IsHanging())
+                    return;
+
+                __result.extraValue0 = 1f;
+            }
+
+            [HarmonyPrefix]
+            [HarmonyPatch("Load")]
+            public static void LoadBucketHanging(SavePrefabData data, SaveablePrefab __instance)
+            {
+                var bottle = __instance.GetComponent<ShipItemBottle>();
+
+                if (bottle == null || bottle.name != "bucket" || data.extraValue0 != 1f)
+                    return;
+
+                LogDebug("Loading hanging bucket");
+                __instance.StartCoroutine(HangBucket(bottle));
+            }
+        }
+
+        internal static IEnumerator HangBucket(ShipItemBottle bucket)
+        {
+            LogDebug("Shifting bucket box collider up");
+            var col = bucket.GetComponent<BoxCollider>();
+            col.center = new Vector3(col.center.x, 0.105417f, col.center.z);
+
+            yield return new WaitUntil(() => bucket.GetComponent<HangableItem>() != null && bucket.GetComponent<HangableItem>().IsHanging());
+
+            col.center = new Vector3(col.center.x, -0.055417f, col.center.z);
+
+            LogDebug("Shifted bucket box collider back down");
         }
     }
 }

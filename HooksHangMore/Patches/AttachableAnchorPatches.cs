@@ -38,7 +38,7 @@ namespace HooksHangMore
 
                 __instance.GetComponent<Rigidbody>().isKinematic = true;
                 __instance.GetComponent<CapsuleCollider>().isTrigger = true;
-            }           
+            }
         }
 
         [HarmonyPatch(typeof(GoPointerButton))]
@@ -80,7 +80,7 @@ namespace HooksHangMore
                     if (__instance.rope.currentLength - num < 0.02f && ___currentInput > 0f)
                     {
                         ___currentInput = 0f;
-                    }                                           
+                    }
                 }
             }
         }
@@ -98,7 +98,7 @@ namespace HooksHangMore
                 var holder = ___item.GetComponent<AttachableItemHolder>();
                 if (holder == null || !holder.IsOccupied || !(holder.AttachedItem is Anchor))
                     return;
-                
+
                 __result.extraValue0 = 1f;
             }
 
@@ -106,33 +106,41 @@ namespace HooksHangMore
             [HarmonyPatch("Load")]
             public static void LoadAnchorAttached(SavePrefabData data, SaveablePrefab __instance)
             {
-                var shipItem = __instance.GetComponent<ShipItem>();
+                var hook = __instance.GetComponent<ShipItemLampHook>();
 
-                if (shipItem != null && shipItem is ShipItemLampHook hook && data.extraValue0 == 1f)
-                {
-                    LogDebug("Loading attached anchor");
-                    __instance.StartCoroutine(AttachAnchor(hook));                                   
-                }
+                if (hook == null || data.extraValue0 != 1f)
+                    return;
+
+                LogDebug("Loading attached anchor");
+                __instance.StartCoroutine(AttachAnchor(hook));
             }
         }
 
         internal static IEnumerator AttachAnchor(ShipItemLampHook hook)
         {
-            yield return new WaitUntil(() => hook.transform.parent?.gameObject?.GetComponentInChildren<RopeControllerAnchor>()?.joint != null);
+            yield return new WaitUntil(() => GetAnchor(hook) != null || !GameState.loadingBoatLocalItems);
 
-            var winch = hook.transform.parent.gameObject.GetComponentInChildren<RopeControllerAnchor>();
+            var anchor = GetAnchor(hook);
 
-            if (winch == null || winch.joint == null)
+            if (anchor == null)
             {
-                LogError($"Could not find RopeControllerAnchor or joint for hook {hook.name}");
+                LogError($"Could not find anchor for hook {hook.name}");
                 yield break;
-            }        
+            }
 
-            LogDebug($"Attaching {winch.joint.name} to hook on {hook.transform.parent.name}");
-            var anchorPickupable = winch.joint.GetComponent<PickupableItem>();
+            LogDebug($"Attaching {anchor.name} to hook on {hook.transform.parent.name}");
+            var anchorPickupable = anchor.GetComponent<PickupableItem>();
             var holder = hook.GetComponent<AttachableItemHolder>();
             holder.AttachItem(anchorPickupable);
             anchorPickupable.GetComponent<AttachableItem>().Holder = holder;
+        }
+
+        internal static ConfigurableJoint GetAnchor(ShipItemLampHook hook)
+        {
+            var shipGameObject = hook.transform.parent == null ? null : hook.transform.parent.gameObject;
+            var winch = shipGameObject == null ? null : shipGameObject.GetComponentInChildren<RopeControllerAnchor>();
+            var joint = winch == null ? null : winch.joint;
+            return joint;
         }
     }
 }

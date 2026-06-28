@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v2.1.1] - 2026-06-28
+
+### Fixed
+- Bug caused by eating or selling an item and then looking at a hook.
+- Buckets falling from hooks when loading a previous save.
+- Ships added via mod not loading properly when they had anchors attached to a hook.
+
 ## [v2.1.0] - 2026-06-26
 
 ### Added

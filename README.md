@@ -42,7 +42,7 @@ These items must be emptied before you hang them.
 
 #### Anchor
 
-While the anchor is attached, you can adjust the length of the rope up to a certain point. You cannot move the vessel by tightening the rope while the anchor is attached to a hook that is not on the ship.  
+While the anchor is attached, you can adjust the length of the rope up to a certain point. You cannot move the vessel by tightening the rope while the anchor is attached to a hook that is not on the ship. Ships added by a mod might not keep the anchor attached when loading a save or returning to it after being far away from it.  
 
 ## For Other Mod Authors
 
