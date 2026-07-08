@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v2.1.2] - 2026-07-08
+
+### Fixed
+- Bug where if a hangable item and a hook are in inventory slots they "connect" when game is loading.
+
 ## [v2.1.1] - 2026-06-28
 
 ### Fixed

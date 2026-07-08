@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("HooksHangMore")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("https://github.com/bryon82/SailwindHooksHangMore")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("raddude")]
 [assembly: AssemblyProduct("HooksHangMore")]
@@ -29,5 +29,5 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("2.1.1.0")]
-[assembly: AssemblyFileVersion("2.1.1.0")]
+[assembly: AssemblyVersion("2.1.2.0")]
+[assembly: AssemblyFileVersion("2.1.2.0")]

@@ -10,14 +10,6 @@ namespace HooksHangMore
         [HarmonyPatch(typeof(ShipItemBottle))]
         private class ShipItemBottlePatches
         {
-            [HarmonyPostfix]
-            [HarmonyPatch("OnLoad")]
-            public static void AddComponent(ShipItemBottle __instance)
-            {
-                if (Offsets.HangingItems.IsHangable(__instance.transform.name))
-                    __instance.gameObject.AddComponent<HangableItem>();
-            }
-
             [HarmonyPrefix]
             [HarmonyPatch("AllowOnItemClick")]
             public static bool AllowOnItemClick(ShipItemBottle __instance, GoPointerButton lookedAtButton, ref bool __result)

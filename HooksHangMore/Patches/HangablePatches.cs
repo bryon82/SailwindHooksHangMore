@@ -10,6 +10,14 @@ namespace HooksHangMore
         private class ShipItemPatches
         {
             [HarmonyPostfix]
+            [HarmonyPatch("Awake")]
+            public static void AddComponent(ShipItem __instance)
+            {
+                if (Offsets.HangingItems.IsHangable(__instance.transform.name))
+                    __instance.gameObject.AddComponent<HangableItem>();
+            }
+
+            [HarmonyPostfix]
             [HarmonyPatch("OnPickup")]
             public static void OnPickup(ShipItem __instance)
             {
@@ -39,7 +47,7 @@ namespace HooksHangMore
         {
             [HarmonyPostfix]
             [HarmonyPatch("ConnectJoint")]
-            public static void AdjustAnchor(HangableItem __instance, Collider hook)
+            public static void AdjustAnchor(HangableItem __instance)
             {
                 if (GameState.currentlyLoading || GameState.loadingBoatLocalItems)
                     return;

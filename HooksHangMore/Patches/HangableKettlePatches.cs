@@ -7,13 +7,6 @@ namespace HooksHangMore
         [HarmonyPatch(typeof(ShipItemKettle))]
         private class ShipItemKettlePatches
         {
-            [HarmonyPostfix]
-            [HarmonyPatch("OnLoad")]
-            public static void AddComponent(ShipItemKettle __instance)
-            {
-                __instance.gameObject.AddComponent<HangableItem>();
-            }
-
             [HarmonyPrefix]
             [HarmonyPatch("AllowOnItemClick")]
             public static bool AllowOnItemClick(ShipItemKettle __instance, GoPointerButton lookedAtButton, ref bool __result)
