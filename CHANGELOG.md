@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v2.1.4] - 2026-07-10
+
+### Fixed
+- Bug where if you have an item hanging on a hook and another hook is very close the item tries to hang on both hooks on load.
+
 ## [v2.1.3] - 2026-07-10
 
 ### Fixed
