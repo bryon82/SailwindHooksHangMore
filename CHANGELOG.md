@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v2.1.3] - 2026-07-10
+
+### Fixed
+- Bug where you could, when collecting a caught fish, hang the fish on a lantern hook that was already occupied.
+
 ## [v2.1.2] - 2026-07-08
 
 ### Fixed

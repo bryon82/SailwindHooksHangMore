@@ -87,6 +87,22 @@ namespace HooksHangMore
 
                 return false;
             }
+
+            [HarmonyPrefix]
+            [HarmonyPatch("OnTriggerEnter")]
+            public static bool OnTriggerEnter(HangableItem __instance, Collider other)
+            {
+                var occupied =
+                    (other.GetComponent<AttachableItemHolder>() != null
+                    && other.GetComponent<AttachableItemHolder>().IsOccupied)
+                    || (other.GetComponent<ShipItemLampHook>() != null
+                    && (bool)Traverse.Create(other.GetComponent<ShipItemLampHook>()).Field("occupied").GetValue());
+
+                if (occupied)                 
+                    return false;
+
+                return true;
+            }
         }
     }
 }
