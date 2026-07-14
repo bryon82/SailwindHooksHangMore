@@ -13,7 +13,7 @@ namespace HooksHangMore
 
         public Vector3 PositionOffset { get; set; }
         public Vector3 RotationOffset { get; set; }
-        public bool IsAttached => Holder != null;        
+        public bool IsAttached => Holder != null;
 
         private void Awake()
         {
@@ -49,17 +49,19 @@ namespace HooksHangMore
         public void OnTriggerEnter(Collider other)
         {
             var holder = other.GetComponent<AttachableItemHolder>();
-            bool canAttach = (_framesAfterAwake < 3f || GameState.currentlyLoading || GameState.loadingBoatLocalItems) &&
+            bool canAttach = 
+                (_framesAfterAwake < 3f ||
+                GameState.currentlyLoading ||
+                GameState.loadingBoatLocalItems) &&
                 !_pickupable.held &&
                 !_disallowHangingOnTrigger &&
                 other.CompareTag("Hook") &&
                 holder != null &&
-                !holder.IsOccupied;
+                !holder.IsOccupied &&
+                !IsAttached;
 
             if (_shipItem != null)
-                canAttach = canAttach &&
-                    _shipItem.sold &&
-                    _shipItem.GetCurrentInventorySlot() == -1;
+                canAttach = canAttach && _shipItem.sold && _shipItem.GetCurrentInventorySlot() == -1;
 
             if (canAttach)
             {

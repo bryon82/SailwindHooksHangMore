@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using static HooksHangMore.HHM_Plugin;
 
@@ -7,13 +8,16 @@ namespace HooksHangMore
 {
     internal class AttachableAnchorPatches
     {
+        private static readonly Dictionary<int, Anchor> _boatAnchors = new Dictionary<int, Anchor>();
+
         [HarmonyPatch(typeof(Anchor))]
         private class AnchorPatches
         {
             [HarmonyPostfix]
             [HarmonyPatch("Awake")]
-            public static void AwakePatch(Anchor __instance)
+            public static void AwakePatch(Anchor __instance, SaveableObject ___boatSaveable)
             {
+                _boatAnchors[___boatSaveable.sceneIndex] = __instance;
                 var attachable = __instance.gameObject.AddComponent<AttachableItem>();
                 if (Offsets.AttachedItems.TryGetOffset(__instance.name, out var offset))
                 {
@@ -96,10 +100,10 @@ namespace HooksHangMore
                     return;
 
                 var holder = ___item.GetComponent<AttachableItemHolder>();
-                if (holder == null || !holder.IsOccupied || !(holder.AttachedItem is Anchor))
+                if (holder == null || !holder.IsOccupied || !(holder.AttachedItem is Anchor anchor))
                     return;
 
-                __result.extraValue0 = 1f;
+                __result.extraValue0 = anchor.GetPrivateField<SaveableObject>("boatSaveable").sceneIndex;
             }
 
             [HarmonyPrefix]
@@ -108,23 +112,21 @@ namespace HooksHangMore
             {
                 var hook = __instance.GetComponent<ShipItemLampHook>();
 
-                if (hook == null || data.extraValue0 != 1f)
+                if (hook == null || data.extraValue0 == 0f)
                     return;
 
                 LogDebug("Loading attached anchor");
-                __instance.StartCoroutine(AttachAnchor(hook));
+                __instance.StartCoroutine(AttachAnchor(hook, (int)data.extraValue0));
             }
         }
 
-        internal static IEnumerator AttachAnchor(ShipItemLampHook hook)
+        internal static IEnumerator AttachAnchor(ShipItemLampHook hook, int sceneIndex)
         {
-            yield return new WaitUntil(() => GetAnchor(hook) != null || !GameState.loadingBoatLocalItems);
+            yield return new WaitUntil(() => _boatAnchors.ContainsKey(sceneIndex) || !GameState.loadingBoatLocalItems);
 
-            var anchor = GetAnchor(hook);
-
-            if (anchor == null)
+            if (!_boatAnchors.TryGetValue(sceneIndex, out Anchor anchor))
             {
-                LogError($"Could not find anchor for hook {hook.name}");
+                LogError($"Could not find anchor {sceneIndex} for hook");
                 yield break;
             }
 
@@ -133,14 +135,6 @@ namespace HooksHangMore
             var holder = hook.GetComponent<AttachableItemHolder>();
             holder.AttachItem(anchorPickupable);
             anchorPickupable.GetComponent<AttachableItem>().Holder = holder;
-        }
-
-        internal static ConfigurableJoint GetAnchor(ShipItemLampHook hook)
-        {
-            var shipGameObject = hook.transform.parent == null ? null : hook.transform.parent.gameObject;
-            var winch = shipGameObject == null ? null : shipGameObject.GetComponentInChildren<RopeControllerAnchor>();
-            var joint = winch == null ? null : winch.joint;
-            return joint;
         }
     }
 }

@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v2.2.0] - 2026-07-14
+
+### Added
+- The ability to rotate lamp hooks clockwise or counter-clockwise when held so you can attach them to surfaces in more ways. 
+
+### Updated
+- The way attached anchors are loaded for more compatibility with ships added via mods.
+
 ## [v2.1.4] - 2026-07-10
 
 ### Fixed

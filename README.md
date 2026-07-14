@@ -44,6 +44,10 @@ These items must be emptied before you hang them.
 
 While the anchor is attached, you can adjust the length of the rope up to a certain point. You cannot move the vessel by tightening the rope while the anchor is attached to a hook that is not on the ship. Ships added by a mod might not keep the anchor attached when loading a save or returning to it after being far away from it.  
 
+#### Lamp Hooks
+
+While holding the key for rotating held item (default Q) and scrolling the mouse wheel, you can rotate the lamp hook clockwise or counter-clockwise up to 90°. This allows you to attach it to a surface in more ways than just the default up, which then gives you more options for attaching items to it.  
+
 ## For Other Mod Authors
 
 If you wish to use this to be able to hang a custom item you made:  

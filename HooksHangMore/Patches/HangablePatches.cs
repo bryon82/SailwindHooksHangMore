@@ -96,7 +96,7 @@ namespace HooksHangMore
                     (other.GetComponent<AttachableItemHolder>() != null
                     && other.GetComponent<AttachableItemHolder>().IsOccupied)
                     || (other.GetComponent<ShipItemLampHook>() != null
-                    && (bool)Traverse.Create(other.GetComponent<ShipItemLampHook>()).Field("occupied").GetValue());
+                    && other.GetComponent<ShipItemLampHook>().GetPrivateField<bool>("occupied"));
 
                 if (__instance.IsHanging() || occupied)
                     return false;

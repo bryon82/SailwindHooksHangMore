@@ -47,6 +47,10 @@
       <HintPath>E:\SteamLibrary\steamapps\common\Sailwind\Sailwind_Data\Managed\Crest.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Oculus.VR, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>E:\SteamLibrary\steamapps\common\Sailwind\Sailwind_Data\Managed\Oculus.VR.dll</HintPath>
+    </Reference>
     <Reference Include="System">
       <HintPath>E:\SteamLibrary\steamapps\common\Sailwind\Sailwind_Data\Managed\System.dll</HintPath>
     </Reference>
@@ -71,7 +75,10 @@
     <Compile Include="Patches\HangableBottlePatches.cs" />
     <Compile Include="Patches\HangableKettlePatches.cs" />
     <Compile Include="Patches\HangablePotPatches.cs" />
+    <Compile Include="Patches\ShipItemRotationPatches.cs" />
     <Compile Include="Patches\UIPatches.cs" />
+    <Compile Include="Scripts\PickupableItemAddOns.cs" />
+    <Compile Include="Utilities\Extensions.cs" />
     <Compile Include="Utilities\Offsets.cs" />
     <Compile Include="Patches\HangableFoodPatches.cs" />
     <Compile Include="Patches\AttachableFishingRodPatches.cs" />
