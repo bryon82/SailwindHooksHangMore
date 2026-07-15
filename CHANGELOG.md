@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v2.2.1] - 2026-07-15
+
+### Added
+- Check for SaveableObject during attached anchor save. This stops ships added via mods from trying to load an attached anchor if they cannot set the length of the anchor rope properly during load. Once mod ships add the SaveableObject to their anchors, they will gain the ability to load an attached anchor.
+
 ## [v2.2.0] - 2026-07-14
 
 ### Added
