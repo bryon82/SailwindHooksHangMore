@@ -11,7 +11,7 @@ namespace HooksHangMore
         {
             [HarmonyBefore(NAND_FIXES_GUID)]
             [HarmonyPostfix]
-            [HarmonyPatch("OnLoad")]
+            [HarmonyPatch("Awake")]
             public static void AddItemHolderAndAttachable(ShipItem __instance)
             {
                 if (__instance is ShipItemLampHook)
@@ -130,6 +130,20 @@ namespace HooksHangMore
                 }
 
                 return true;
+            }
+        }
+
+        [HarmonyPatch(typeof(SaveablePrefab), "Load")]
+        private class SaveablePrefabPAtches
+        {
+            public static void Prefix(SavePrefabData data, SaveablePrefab __instance)
+            {
+                if (data.inventorySlot > -1)
+                {
+                    var attachable = __instance.GetComponent<AttachableItem>();
+                    if (attachable != null)                    
+                        attachable.LoadInInventory();
+                }
             }
         }
     }

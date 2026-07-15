@@ -16,7 +16,7 @@ namespace HooksHangMore
             [HarmonyPostfix]
             [HarmonyPatch("Awake")]
             public static void AwakePatch(Anchor __instance, SaveableObject ___boatSaveable)
-            {
+            {                
                 _boatAnchors[___boatSaveable.sceneIndex] = __instance;
                 var attachable = __instance.gameObject.AddComponent<AttachableItem>();
                 if (Offsets.AttachedItems.TryGetOffset(__instance.name, out var offset))
@@ -103,6 +103,10 @@ namespace HooksHangMore
                 if (holder == null || !holder.IsOccupied || !(holder.AttachedItem is Anchor anchor))
                     return;
 
+                // Ships added via mods may not have a SaveableObject component
+                if (anchor.gameObject.GetComponent<SaveableObject>() == null)
+                    return;
+
                 __result.extraValue0 = anchor.GetPrivateField<SaveableObject>("boatSaveable").sceneIndex;
             }
 
@@ -112,7 +116,7 @@ namespace HooksHangMore
             {
                 var hook = __instance.GetComponent<ShipItemLampHook>();
 
-                if (hook == null || data.extraValue0 == 0f)
+                if (hook == null || data.extraValue0 <= 0f)
                     return;
 
                 LogDebug("Loading attached anchor");
@@ -130,7 +134,7 @@ namespace HooksHangMore
                 yield break;
             }
 
-            LogDebug($"Attaching {anchor.name} to hook on {hook.transform.parent.name}");
+            LogDebug($"Attaching {anchor.name} to hook on {hook.transform.parent.name}");            
             var anchorPickupable = anchor.GetComponent<PickupableItem>();
             var holder = hook.GetComponent<AttachableItemHolder>();
             holder.AttachItem(anchorPickupable);
