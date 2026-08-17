@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using static HooksHangMore.HHM_Plugin;
 
 namespace HooksHangMore
 {
@@ -7,49 +8,34 @@ namespace HooksHangMore
     {
         public Vector3 Position { get; }
         public Vector3 Rotation { get; }
-        public float RotX { get; }
-        public float RotY { get; }
-        public float RotZ { get; }
         public bool LockX { get; }
         public bool LockZ { get; }
         public Offsets(
             Vector3 positionOffset,
             Vector3 rotationOffset = default,
-            bool isFish = false,
-            float rotX = 0f,
-            float rotY = 0f,
-            float rotZ = 0f,
             bool lockX = true,
-            bool lockZ = true)
+            bool lockZ = true,
+            bool isFish = false)
         {
             Position = positionOffset;
-            Rotation = rotationOffset;
-            RotX = rotX;
-            RotY = rotY;
-            RotZ = rotZ;
+            Rotation = isFish ? new Vector3(0f, 90f, 270f) : rotationOffset;
             LockX = lockX;
             LockZ = lockZ;
-
-            if (isFish)
-            {
-                RotY = 90f;
-                RotZ = 270f;
-            }
         }
 
-        public static readonly Dictionary<string, Offsets> HangingItems = new Dictionary<string, Offsets>
+        public static Dictionary<string, Offsets> HangingItems = new Dictionary<string, Offsets>
         {
             { "70 bucket(Clone)", new Offsets(new Vector3(0f, -0.245f, 0f)) },
             { "382 kettle A(Clone)", new Offsets(new Vector3(0f, -0.289f, 0f)) },
             { "383 kettle E(Clone)", new Offsets(new Vector3(0f, -0.2f, -0.01f)) },
             { "384 kettle M(Clone)", new Offsets(new Vector3(0f, -0.26f, 0f)) },
-            { "156 pot(Clone)", new Offsets(new Vector3(0.02f, -0.175f, -0.11f), rotY: 270f, rotZ: 40f) },
-            { "157 pot big(Clone)", new Offsets(new Vector3(0.025f, -0.205f, -0.13f), rotY: 270f, rotZ: 50f) },
-            { "102 mug metal(Clone)", new Offsets(new Vector3(0f, -0.12f, -0.02f), rotY: 90f, rotZ:-28f) },
-            { "102 mug metal", new Offsets(new Vector3(0f, -0.12f, -0.02f), rotY: 90f, rotZ: -28f) },
-            { "103 mug metal gold(Clone)", new Offsets(new Vector3(0f, -0.12f, -0.02f), rotY: 90f, rotZ: -20f) },
-            { "100 mug wood(Clone)", new Offsets(new Vector3(-0.07f, -0.075f, -0.02f), rotZ: 270f) },
-            { "100 mug wood", new Offsets(new Vector3(-0.07f, -0.075f, -0.02f), rotZ: 270f) },
+            { "156 pot(Clone)", new Offsets(new Vector3(0.02f, -0.175f, -0.11f), new Vector3(0f, 270f, 40f)) },
+            { "157 pot big(Clone)", new Offsets(new Vector3(0.025f, -0.205f, -0.13f), new Vector3(0f, 270f, 50f)) },
+            { "102 mug metal(Clone)", new Offsets(new Vector3(0f, -0.12f, -0.02f), new Vector3(0f, 90f, -28f)) },
+            { "102 mug metal", new Offsets(new Vector3(0f, -0.12f, -0.02f), new Vector3(0f, 90f, -28f)) },
+            { "103 mug metal gold(Clone)", new Offsets(new Vector3(0f, -0.12f, -0.02f), new Vector3(0f, 90f, -20f)) },
+            { "100 mug wood(Clone)", new Offsets(new Vector3(-0.07f, -0.075f, -0.02f), new Vector3(0f, 0f, 270f)) },
+            { "100 mug wood", new Offsets(new Vector3(-0.07f, -0.075f, -0.02f), new Vector3(0f, 0f, 270f)) },
             { "31 templefish (A)(Clone)", new Offsets(new Vector3(-0.035f, -0.14f, 0f), isFish: true) },
             { "32 sunspot fish (A)(Clone)", new Offsets(new Vector3(-0.05f, -0.21f, 0f), isFish: true) },
             { "46 tuna (A)(Clone)", new Offsets(new Vector3(0f, -0.27f, 0f), isFish: true) },
@@ -65,7 +51,7 @@ namespace HooksHangMore
             { "148 swamp fish 3(Clone)", new Offsets(new Vector3(-0.065f, -0.2f, 0f), isFish: true) }, // fire fish
         };
 
-        public static readonly Dictionary<string, Offsets> AttachedItems = new Dictionary<string, Offsets>
+        public static Dictionary<string, Offsets> AttachedItems = new Dictionary<string, Offsets>
         {
             { "fishing rod", new Offsets(new Vector3(0.309f, 1.1f, -0.38f), new Vector3(-40f, 180f, 0f)) },
             { "broom", new Offsets(new Vector3(0f, -0.25f, -0.11f)) },
@@ -79,6 +65,34 @@ namespace HooksHangMore
             { "anchor_M", new Offsets(new Vector3(0f, 0.2f, -0.13f), new Vector3(270f, 0f, 0f)) },
             { "anchor_A", new Offsets(new Vector3(0f, 0.2f, -0.13f), new Vector3(270f, 0f, 0f)) }
         };
+
+        public static bool AddAttachedOffset(string itemName, Vector3 positionOffset, Vector3 rotationOffset)
+        {
+            if (AttachedItems.ContainsKey(itemName))
+            {
+                LogWarning($"Attached item offset for {itemName} already exists.");
+                return false;
+            }
+            else
+            {
+                AttachedItems.Add(itemName, new Offsets(positionOffset, rotationOffset));
+                return true;
+            }
+        }
+        
+        public static bool AddHangingOffset(string itemName, Vector3 positionOffset, Vector3 rotationOffset, bool lockX, bool lockZ)
+        {
+            if (HangingItems.ContainsKey(itemName))
+            {
+                LogWarning($"Hanging item offset for {itemName} already exists.");
+                return false;
+            }
+            else
+            {
+                HangingItems.Add(itemName, new Offsets(positionOffset, rotationOffset, lockX, lockZ));
+                return true;
+            }
+        }
     }
 
     internal static class OffsetsExtensions

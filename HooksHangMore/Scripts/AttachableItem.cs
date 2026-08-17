@@ -22,8 +22,6 @@ namespace HooksHangMore
             Holder = null;
             _disallowHangingOnTrigger = false;
             _framesAfterAwake = 0f;
-            PositionOffset = Vector3.zero;
-            RotationOffset = Vector3.zero;
         }
 
         private void LateUpdate()

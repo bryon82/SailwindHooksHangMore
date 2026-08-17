@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using UnityEngine;
 using static HooksHangMore.HHM_Plugin;
+using static HooksHangMore.Configs;
 
 namespace HooksHangMore
 {
@@ -22,6 +23,11 @@ namespace HooksHangMore
                     var attachable = __instance.gameObject.AddComponent<AttachableItem>();
                     attachable.PositionOffset = offset.Position;
                     attachable.RotationOffset = offset.Rotation;
+                    if (__instance is ShipItemKnife && flipKnifeRotation.Value)
+                    {
+                        attachable.PositionOffset = new Vector3(-attachable.PositionOffset.x, -attachable.PositionOffset.y, attachable.PositionOffset.z);
+                        attachable.RotationOffset = new Vector3(attachable.RotationOffset.x - 180, attachable.RotationOffset.y, attachable.RotationOffset.z);
+                    }
                 }
             }
 
@@ -141,7 +147,7 @@ namespace HooksHangMore
                 if (data.inventorySlot > -1)
                 {
                     var attachable = __instance.GetComponent<AttachableItem>();
-                    if (attachable != null)                    
+                    if (attachable != null)
                         attachable.LoadInInventory();
                 }
             }

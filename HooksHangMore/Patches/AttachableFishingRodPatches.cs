@@ -7,18 +7,6 @@ namespace HooksHangMore
 {
     internal class AttachableFishingRodPatches
     {
-        [HarmonyPatch(typeof(ShipItemFishingRod), "OnLoad")]
-        private class ShipItemFishingRodPatches
-        {
-            public static void Postfix(ShipItemFishingRod __instance)
-            {
-                var attachable = __instance.gameObject.AddComponent<AttachableItem>();
-                var offset = Offsets.AttachedItems.GetOffset(__instance.name);
-                attachable.PositionOffset = offset.Position;
-                attachable.RotationOffset = offset.Rotation;
-            }
-        }
-
         [HarmonyPatch(typeof(FishingRodFish), "Update")]
         private class FishingRodFishPatches
         {
@@ -56,7 +44,7 @@ namespace HooksHangMore
                 float num = Mathf.InverseLerp(3f, 20f, value) * 2.5f + 0.5f;
                 if (___fishTimer <= 0f)
                 {
-                    ___fishTimer = 1f;                    
+                    ___fishTimer = 1f;
                     num /= divisor;
                     if (Random.Range(0f, 100f) < num)
                     {

@@ -56,7 +56,7 @@ namespace HooksHangMore
                     return;
 
                 var eulerAngles = __instance.transform.eulerAngles;
-                eulerAngles.y += offset.RotY;
+                eulerAngles.y += offset.Rotation.y;
                 __instance.transform.eulerAngles = eulerAngles;
             }
 
@@ -72,10 +72,10 @@ namespace HooksHangMore
 
                 Vector3 eulerAngles = __instance.transform.eulerAngles;
                 if (offset.LockX)
-                    eulerAngles.x = offset.RotX;
+                    eulerAngles.x = offset.Rotation.x;
 
                 if (offset.LockZ)
-                    eulerAngles.z = offset.RotZ;
+                    eulerAngles.z = offset.Rotation.z;
 
                 __instance.transform.eulerAngles = eulerAngles;
                 __instance.transform.position = ___currentHook.transform.position +

@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v2.2.2] - 2026-08-17
+
+### Added
+- Exposed methods so other mod authors can easily add items and make them lantern hook attachable or hangable.
+
 ## [v2.2.1] - 2026-07-15
 
 ### Added

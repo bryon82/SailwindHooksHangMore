@@ -70,7 +70,6 @@
   <ItemGroup>
     <Compile Include="HHM_Plugin.cs" />
     <Compile Include="Patches\AttachableAnchorPatches.cs" />
-    <Compile Include="Patches\AttachableChipLogPatches.cs" />
     <Compile Include="Patches\AttachableKnifePatches.cs" />
     <Compile Include="Patches\HangableBottlePatches.cs" />
     <Compile Include="Patches\HangableKettlePatches.cs" />
