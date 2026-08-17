@@ -7,6 +7,9 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Exposed methods so other mod authors can easily add items to make them lantern hook attachable or hangable.
 
+### Fixed
+- Removed the second AttachableItem component that was getting added to some items causing duplicate key exceptions when one item was trying to attach to two hooks.
+
 ## [v2.2.1] - 2026-07-15
 
 ### Added
