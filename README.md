@@ -19,6 +19,7 @@ Allows you to hang more items on lamp hooks.
 * Metal Mug
 * Wooden Mug
 * Anchor
+* Anemometer (from [Windicators](https://github.com/NANDbrew/Windicators))
 
 #### Fishing Rod
 

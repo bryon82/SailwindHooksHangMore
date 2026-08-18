@@ -15,7 +15,7 @@ namespace HooksHangMore
     {
         public const string PLUGIN_GUID = "com.raddude.hookshangmore";
         public const string PLUGIN_NAME = "HooksHangMore";
-        public const string PLUGIN_VERSION = "2.2.2";
+        public const string PLUGIN_VERSION = "2.2.3";
 
         public const string IDLE_FISHING_GUID = "com.isa_idlefishing.patch";
         public const string COOKED_INFO_GUID = "pr0skynesis.cookedinfo";
@@ -32,6 +32,8 @@ namespace HooksHangMore
         internal static bool IdleFishingFound { get; private set; } = false;
         internal static Dictionary<PickupableItem, AttachableItemHolder> AttachedItems { get; set; }
 
+        public static Dictionary<string, Offsets> GetHangingOffsets => Offsets.HangingItems;
+        public static Dictionary<string, Offsets> GetAttachedOffsets => Offsets.AttachedItems;
         public static bool AddAttachedOffset(string itemName, Vector3 positionOffset, Vector3 rotationOffset) =>
             Offsets.AddAttachedOffset(itemName, positionOffset, rotationOffset);
 

@@ -18,7 +18,7 @@ namespace HooksHangMore
                 if (__instance is ShipItemLampHook)
                     __instance.gameObject.AddComponent<AttachableItemHolder>();
 
-                if (Offsets.AttachedItems.TryGetOffset(__instance.name, out var offset))
+                if (Offsets.AttachedItems.TryGetOffset(__instance, out var offset))
                 {
                     var attachable = __instance.gameObject.AddComponent<AttachableItem>();
                     attachable.PositionOffset = offset.Position;
@@ -106,6 +106,7 @@ namespace HooksHangMore
             [HarmonyPatch("OnItemClick")]
             public static bool OnItemClick(PickupableItem heldItem, ShipItemLampHook __instance, bool ___occupied, ref bool __result)
             {
+                LogDebug($"OnItemClick called for {heldItem}");
                 var holder = __instance.GetComponent<AttachableItemHolder>();
                 if (holder.IsOccupied || ___occupied)
                 {

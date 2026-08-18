@@ -4,7 +4,7 @@ using static HooksHangMore.HHM_Plugin;
 
 namespace HooksHangMore
 {
-    internal class Offsets
+    public class Offsets
     {
         public Vector3 Position { get; }
         public Vector3 Rotation { get; }
@@ -51,6 +51,32 @@ namespace HooksHangMore
             { "148 swamp fish 3(Clone)", new Offsets(new Vector3(-0.065f, -0.2f, 0f), isFish: true) }, // fire fish
         };
 
+        //public static Dictionary<int, Offsets> HangingItems = new Dictionary<int, Offsets>
+        //{
+        //    { 70, new Offsets(new Vector3(0f, -0.245f, 0f)) }, // bucket
+        //    { 382, new Offsets(new Vector3(0f, -0.289f, 0f)) }, // kettle A
+        //    { 383, new Offsets(new Vector3(0f, -0.2f, -0.01f)) }, // kettle E
+        //    { 384, new Offsets(new Vector3(0f, -0.26f, 0f)) }, // kettle M
+        //    { 156, new Offsets(new Vector3(0.02f, -0.175f, -0.11f), new Vector3(0f, 270f, 40f)) }, // pot
+        //    { 157, new Offsets(new Vector3(0.025f, -0.205f, -0.13f), new Vector3(0f, 270f, 50f)) }, // pot big
+        //    { 102, new Offsets(new Vector3(0f, -0.12f, -0.02f), new Vector3(0f, 90f, -28f)) }, // mug metal
+        //    { 103, new Offsets(new Vector3(0f, -0.12f, -0.02f), new Vector3(0f, 90f, -20f)) }, // mug metal gold
+        //    { 100, new Offsets(new Vector3(-0.07f, -0.075f, -0.02f), new Vector3(0f, 0f, 270f)) }, // mug wood
+        //    { 31, new Offsets(new Vector3(-0.035f, -0.14f, 0f), isFish: true) }, // templefish (A)
+        //    { 32, new Offsets(new Vector3(-0.05f, -0.21f, 0f), isFish: true) }, // sunspot fish (A)
+        //    { 46, new Offsets(new Vector3(0f, -0.27f, 0f), isFish: true) }, // tuna (A)
+        //    { 33, new Offsets(new Vector3(-0.035f, -0.3f, 0f), isFish: true) }, // salmon (E)
+        //    { 34, new Offsets(new Vector3(-0.006f, -0.65f, 0.01f), isFish: true) }, // eel (E)
+        //    { 35, new Offsets(new Vector3(-0.05f, -0.28f, 0f), isFish: true) }, // shimmertail (E)
+        //    { 36, new Offsets(new Vector3(-0.04f, -0.28f, 0f), isFish: true) }, // trout (M)
+        //    { 37, new Offsets(new Vector3(-0.03f, -0.2f, 0f), isFish: true) }, // north fish (M)
+        //    { 38, new Offsets(new Vector3(-0.035f, -0.245f, 0f), isFish: true) }, // blackfin hunter (M)
+        //    { 140, new Offsets(new Vector3(0f, -0.27f, 0f), isFish: true) }, // gold albacore
+        //    { 141, new Offsets(new Vector3(-0.035f, -0.265f, 0f), isFish: true) }, // swamp snapper
+        //    { 142, new Offsets(new Vector3(-0.045f, -0.19f, 0f), isFish: true) }, // blue bubbler
+        //    { 148, new Offsets(new Vector3(-0.065f, -0.2f, 0f), isFish: true) }, // fire fish
+        //};
+
         public static Dictionary<string, Offsets> AttachedItems = new Dictionary<string, Offsets>
         {
             { "fishing rod", new Offsets(new Vector3(0.309f, 1.1f, -0.38f), new Vector3(-40f, 180f, 0f)) },
@@ -63,7 +89,8 @@ namespace HooksHangMore
             { "anchor_E (1)", new Offsets(new Vector3(0f, 0.2f, -0.13f), new Vector3(270f, 0f, 0f)) },
             { "anchor_E", new Offsets(new Vector3(0f, 0.2f, -0.13f), new Vector3(270f, 0f, 0f)) },
             { "anchor_M", new Offsets(new Vector3(0f, 0.2f, -0.13f), new Vector3(270f, 0f, 0f)) },
-            { "anchor_A", new Offsets(new Vector3(0f, 0.2f, -0.13f), new Vector3(270f, 0f, 0f)) }
+            { "anchor_A", new Offsets(new Vector3(0f, 0.2f, -0.13f), new Vector3(270f, 0f, 0f)) },
+            { "512 anemometer(Clone)", new Offsets(new Vector3(0.002f, 0.25f, -0.12f)) },
         };
 
         public static bool AddAttachedOffset(string itemName, Vector3 positionOffset, Vector3 rotationOffset)
@@ -79,7 +106,7 @@ namespace HooksHangMore
                 return true;
             }
         }
-        
+
         public static bool AddHangingOffset(string itemName, Vector3 positionOffset, Vector3 rotationOffset, bool lockX, bool lockZ)
         {
             if (HangingItems.ContainsKey(itemName))
@@ -97,8 +124,17 @@ namespace HooksHangMore
 
     internal static class OffsetsExtensions
     {
-        public static bool TryGetOffset(this Dictionary<string, Offsets> dict, string itemName, out Offsets offset)
-            => dict.TryGetValue(itemName, out offset);
+        public static bool TryGetOffset(this Dictionary<string, Offsets> dict, Anchor item, out Offsets offset)
+            => dict.TryGetValue(item.name, out offset);
+
+        public static bool TryGetOffset(this Dictionary<string, Offsets> dict, HangableItem item, out Offsets offset)
+            => dict.TryGetValue(item.name, out offset);
+
+        public static bool TryGetOffset(this Dictionary<string, Offsets> dict, ShipItem item, out Offsets offset)
+        {
+            var key = dict.ContainsKey(item.transform.name) ? item.transform.name : item.name;
+            return dict.TryGetValue(key, out offset);
+        }            
 
         public static Offsets GetOffset(this Dictionary<string, Offsets> dict, string itemName)            
             => dict.TryGetValue(itemName, out Offsets offset) ? offset : null;

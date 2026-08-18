@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v2.2.3] - 2026-08-17
+
+### Added
+- The ability to attach handheld anemometers from windicators mod.
+
 ## [v2.2.2] - 2026-08-17
 
 ### Added

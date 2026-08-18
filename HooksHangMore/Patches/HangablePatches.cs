@@ -52,7 +52,7 @@ namespace HooksHangMore
                 if (GameState.currentlyLoading || GameState.loadingBoatLocalItems)
                     return;
 
-                if (!Offsets.HangingItems.TryGetOffset(__instance.name, out Offsets offset))
+                if (!Offsets.HangingItems.TryGetOffset(__instance, out Offsets offset))
                     return;
 
                 var eulerAngles = __instance.transform.eulerAngles;
@@ -67,7 +67,7 @@ namespace HooksHangMore
                 if (!__instance.IsHanging())
                     return true;
 
-                if (!Offsets.HangingItems.TryGetOffset(__instance.name, out Offsets offset))
+                if (!Offsets.HangingItems.TryGetOffset(__instance, out Offsets offset))
                     return true;
 
                 Vector3 eulerAngles = __instance.transform.eulerAngles;

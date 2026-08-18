@@ -16,10 +16,10 @@ namespace HooksHangMore
             [HarmonyPostfix]
             [HarmonyPatch("Awake")]
             public static void AwakePatch(Anchor __instance, SaveableObject ___boatSaveable)
-            {                
+            {
                 _boatAnchors[___boatSaveable.sceneIndex] = __instance;
                 var attachable = __instance.gameObject.AddComponent<AttachableItem>();
-                if (Offsets.AttachedItems.TryGetOffset(__instance.name, out var offset))
+                if (Offsets.AttachedItems.TryGetOffset(__instance, out var offset))
                 {
                     attachable.PositionOffset = offset.Position;
                     attachable.RotationOffset = offset.Rotation;
