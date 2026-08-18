@@ -19,7 +19,7 @@ Allows you to hang more items on lamp hooks.
 * Metal Mug
 * Wooden Mug
 * Anchor
-* Anemometer (from [Windicators](https://github.com/NANDbrew/Windicators))
+* Handheld Anemometer (from [Windicators](https://github.com/NANDbrew/Windicators))
 
 #### Fishing Rod
 
@@ -51,29 +51,23 @@ While holding the key for rotating held item (default Q) and scrolling the mouse
 
 ## For Other Mod Authors
 
-If you wish to use this to be able to hang a custom item you made:  
-1. Add this mod dll as a reference.
-2. Add this mod as a BepInEx dependency.
-3. Have your item inherit from ShipItem.
-4. Override OnLoad, in it add the HolderAttachable component and set the offsets so your item hangs properly. PositionOffset and RotationOffset are both of type Vector3. If you do not set them then they default to Vector3.zero.
-5. Override AllowOnItemClick to check if you are clicking on a holder and that the holder is not occupied.  
+If you wish to use this to be able to attach a custom item you made to a hook:  
+1. Add this mod as a soft BepInEx dependency.
+2. Make sure your item has a ShipItem component or has a component which inherits from ShipItem.
+3. In your main plugin class, before your assets are loaded, call the exposed function to add offsets for your item. You can use either the prefab name or name that is in ShipItem. The parameters are string name, Vector3 position_offset, Vector3 rotation_offset.  
 
 Example:
 ```c#
-public override void OnLoad()
+foreach (var plugin in Chainloader.PluginInfos)
 {
-    initialHoldDistance = holdDistance;
-    var attachable = gameObject.AddComponent<HolderAttachable>();
-    attachable.PositionOffset = new Vector3(0.02f, -0.15f, -0.12f);
-    attachable.RotationOffset = new Vector3(270f, 270f, 0f);
-}
+    var metadata = plugin.Value.Metadata;
+    if (metadata.GUID.Equals(HOOKS_HANG_MORE_GUID))
+    {
+        LogInfo("Hooks Hang More mod found");
+        var hhm = Traverse.Create(plugin.Value.Instance);
 
-public override bool AllowOnItemClick(GoPointerButton lookedAtButton)
-{
-    if (lookedAtButton.GetComponent<ShipItemHolder>() != null && !lookedAtButton.GetComponent<ShipItemHolder>().IsOccupied)
-        return true;
-
-    return false;
+        hhm.Method("AddAttachedOffset", "custom item(Clone)", new Vector3(0f, 0.2f, -0.13f), new Vector3(270f, 0f, 0f)).GetValue<bool>();
+    }
 }
 ```
 
