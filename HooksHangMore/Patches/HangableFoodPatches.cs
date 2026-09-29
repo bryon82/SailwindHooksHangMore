@@ -17,8 +17,11 @@ namespace HooksHangMore
             [HarmonyPatch("Update")]
             public static void HangDry(FoodState __instance, ShipItemFood ___food)
             {
+                if (!GameState.playing || __instance.inWater || !___food.sold)
+                    return;
+
                 var hangable = __instance.GetComponent<HangableItem>();
-                if (!GameState.playing || __instance.inWater || !___food.sold || hangable == null || !hangable.IsHanging())
+                if (hangable == null || !hangable.IsHanging())
                     return;
 
                 float num = Time.deltaTime * Sun.sun.timescale / (30f * ___food.GetEnergyPerBite());
